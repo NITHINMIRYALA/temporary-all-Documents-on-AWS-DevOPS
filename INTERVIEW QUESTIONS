@@ -1,0 +1,39 @@
+COGNIZANT INTERVIEW QUESTIONS:
+
+1.What are your day-today activities?
+Checking emails,responding back to them,reviewing deployment documents,checking the new realease,new features which are goinf to add to applciation,
+and attending meetings,updating my task in scrum call,resolving my tickets within the given sprint.
+deploying to cloud when ever developers write new code and ask us to deploy.
+2.What do u work on?
+i will be deploying new realease for clients for three environments,dev,test and production.
+we have deployment document and if any changes or bugs found at the time of deploymen twill be escalated to build team.
+
+i work on git,jenkins ,aws cloud(include services which you know) jira,apache tomcat.
+
+3.What is the build tool u use?
+our code is written in java and we use maven as build tool
+4.What are third party dependencies u define in build tool?
+we integrate many plugins like git,maven,java,deployer to tomcat,nexus artifactory and many more.
+5.Which type of pipeline u use in jenkins?
+parametirized jobs pipeline
+
+6.How do u automate multi pipeline?
+if the first pipeline will gets executed then the second will start building.
+if first one is failed then whole pipeline will get failed.
+7.What are the testings u do?
+i will just deploy the applicaitonf and check if its running or not and then testing team will run the necessary test cases.
+
+8.Will u create barnches in git or developers do them?
+developers will be creating the branches in it and my scrum master will verify the code and merge it to developed branch.
+i will pull the code from develop branch to jenkins.
+
+9.How to merge branches in git?
+to merge branches developers will send pull request as they dont have acccess to merge branches,scrum master will verify and then 
+merge the code to develop branch.
+we can do that from command like git merge <branch_name>
+
+10.What will u do if the code to deployed has an error in it?
+if the code has error then it will found at dev environment itself then it will be escalated to the respected team to debug and solve the issue.
+if in worst case it was found after deploying to prodcution then we can redeploy the older version,we store all the artifacts of older verion in nexus.
+
+we will redeploy the older version and once the bug is resolved we again eploy it to dev,test and production again.

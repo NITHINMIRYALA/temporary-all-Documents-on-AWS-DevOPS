@@ -1,0 +1,276 @@
+pipeline {
+ 
+    agent any
+ 
+    parameters {
+        string(defaultValue: '', description: '', name: 'ApiKey')
+        // envionment which we will build
+        choice(name: 'environment',
+            choices: 'Dev\nTest\nPro',
+            description: 'What environment do you choose?')
+        //build default we don't need to build every changes in gitSCM
+        //booleanParam(defaultValue: false, description: '', name: 'buildFlag')
+        booleanParam(defaultValue: false, description: '', name: 'buildVACore')
+        booleanParam(defaultValue: false, description: '', name: 'buildConversation')
+        booleanParam(defaultValue: false, description: '', name: 'buildCloudant')
+        booleanParam(defaultValue: false, description: 'Do you want to re-deploy API Connect ?', name: 'buildApiConnect')
+ 
+    }
+    stages {
+        stage('Prepare') {
+            steps {
+                script {
+                    if (params.buildCloudant || params.buildConversation || params.buildVACore || params.buildApiConnect) {
+ 
+                        echo 'Load Environment Settings'
+                        load "jenkins/${params.environment}/env_prop.properties"
+                    } else {
+                        echo 'no build'
+                    }
+                }
+            }
+        }
+        stage('Clean Workspace') {
+            steps {
+                script {
+                    // if (params.buildFlag) {
+                    //     echo 'Clean Workspace'
+                    //     deleteDir()
+                    // } else {
+                    //     echo 'no build'
+                    // }
+                    echo 'Clean Workspace'
+                    deleteDir()
+                }
+            }
+        }
+ 
+        stage('Checkout Virtual Agent') {
+            steps {
+                script {
+                    // if (params.buildFlag) {
+                    //     echo 'Checkout'
+                    //     checkout scm
+                    // } else {
+                    //     echo 'no build'
+                    // }
+                    echo 'Checkout'
+                    checkout scm
+                }
+            }
+        }
+        stage("Deploy VA Core to Bluemix") {
+            steps {
+                dir('Core') {
+                    withDockerContainer(image: "node:6.11.3") {
+                        script {
+                            if (params.buildVACore) {
+ 
+                                sh "npm install"
+                                sh "sh encrypt_environment_variable.sh"
+                                echo 'Show manifest.yml'
+                                sh "cat environments/${path_config}/manifest.yml"
+                                sh "cp environments/${path_config}/config.js client/scripts/config.js"
+                                sh "cp environments/${path_config}/manifest.yml manifest.yml"
+                                sh "cp environments/${path_config}/.env.enc .env.enc"
+                                echo 'Show after copy manifest.yml'
+                                sh "cat manifest.yml"
+                                sh "sed -i -e 's/url_cloudant/'$url_cloudant'/g' server/datasources.default.json"
+                                sh "sed -i -e 's/cloudant_user/'$cloudant_user'/g' server/datasources.default.json"
+                                sh "sed -i -e 's/cloudant_pass/'$cloudant_pass'/g' server/datasources.default.json"
+                                sh "cp server/datasources.default.json server/datasources.json"
+                                sh "cp server/datasources.default.json server/datasources.dev.json"
+                                sh "cp server/datasources.default.json server/datasources.test.json"
+                                sh "cp server/datasources.default.json server/datasources.longtail.json"
+                                sh "cp server/datasources.default.json server/datasources.${envVA}.json"
+                                //Deploy to Bluemix
+                                echo "MYKEY: ${org}"
+                                echo "REPO: ${space}"
+                                sh "cat manifest.yml"
+ 
+                            } else {
+                                echo "no build"
+                            }
+                        }
+                    }
+                    withDockerContainer(image: "govau/cf-cli") {
+                        script {
+                            if (params.buildVACore) {
+ 
+                                sh "yes '' | cf login -a 'https://api.ng.bluemix.net' -u apikey -p ${params.ApiKey}"
+                                sh "cf target -o '${org}' -s '${space}'"
+                                sh "cf set-env '${app_name}' NODE_ENV '${envVA}'"
+                                sh "cf set-env '${app_name}' CORE_AGENT_BRANCH '${env.BRANCH_NAME}'"
+                                sh "cf set-env '${app_name}' S4BNAME '${Skype4BName}'"
+                                sh "cf set-env '${app_name}' DOTENVENC_KEY '${PASS_ENCRYPT}'"
+                                sh "cf stop ${app_name}"
+                                sh "cf push ${app_name} -b sdk-for-nodejs"
+ 
+                            } else {
+                                echo "no build"
+                            }
+                        }
+ 
+                    }
+                }
+            }
+        }
+        stage("Deploy Conversation to Bluemix") {
+ 
+            steps {
+                dir('Conversation') {
+                    withDockerContainer(image: "node:6.11.3") {
+                        script {
+                            if (params.buildConversation) {
+ 
+                                sh "npm --version"
+                                sh "npm update"
+                                sh "npm install"
+                                if(iam){
+                                    sh "node publish.js  'master' '2018-09-20'"
+                                } else {
+                                    sh "node publish.js  'master' '2018-09-20'"
+                                }
+                            } else {
+                                echo "no build"
+                            }
+                        }
+                    }
+                    withDockerContainer(image: "govau/cf-cli") {
+                        script {
+                            if (params.buildConversation) {
+ 
+                                echo "MYKEY: ${org}"
+                                echo "REPO: ${space}"
+                                //login to Bluemix
+                                sh "yes '' | cf login -a 'https://api.ng.bluemix.net' -u apikey -p ${params.ApiKey}"
+                                sh "cf target -o '${org}' -s '${space}'"
+                                //get conversation old workspace id from env
+                                sh "cf env ${app_name}"
+                                sh "cf env ${app_name} >> environment.json"
+                                sh "cat environment.json"
+ 
+                            } else {
+                                echo "no build"
+                            }
+                        }
+                    }
+                    withDockerContainer(image: "node:6.11.3") {
+                        script {
+                            if (params.buildConversation) {
+ 
+                                if(iam){
+                                    sh "npm run-script build"
+                                    sh "sed -i -e 's/api_key/'${apikey}'/g' jenkinsbuild_iam.sh"
+                                    def old_id = readFile 'old_workspace_id.txt'
+                                    echo "${old_id}"
+                                    sh "sed -i -e 's/old_workspace_id_bluemix/'${old_id}'/g' jenkinsbuild_iam.sh"
+                                    echo "read file: jenkinsbuild_iam"
+                                    sh "cat jenkinsbuild_iam.sh"
+                                    sh "sh jenkinsbuild_iam.sh"
+                                }else{
+                                    sh "npm run-script build"
+                                    sh "sed -i -e 's/workspace_target_username_bluemix/'${workspace_target_username}'/g' jenkinsbuild.sh"
+                                    sh "sed -i -e 's/workspace_target_pass_bluemix/'${workspace_target_pass}'/g' jenkinsbuild.sh"
+                                    def old_id = readFile 'old_workspace_id.txt'
+                                    echo "${old_id}"
+                                    sh "sed -i -e 's/old_workspace_id_bluemix/'${old_id}'/g' jenkinsbuild.sh"
+                                    sh "sh jenkinsbuild.sh"
+                                }
+ 
+                            } else {
+                                echo "no build"
+                            }
+                        }
+                    }
+                    withDockerContainer(image: "govau/cf-cli") {
+                        script {
+                            if (params.buildConversation) {
+ 
+                                def workspace_target_id = readFile 'new_workspace_id.txt'
+                                echo "${workspace_target_id}"
+                                sh "yes '' | cf login -a 'https://api.ng.bluemix.net' -u apikey -p ${params.ApiKey}"
+                                sh "cf target -o '${org}' -s '${space}'"
+                                sh "cf set-env '${app_name}' 'CONVERSATION_WORKSPACE_ID' '${workspace_target_id}'"
+                                sh "cf set-env '${app_name}' CONVERSATION_BRANCH '${env.BRANCH_NAME}'"
+                                sh "cf set-env '${app_name}' BUILD_NUMBER '${env.BUILD_NUMBER}'"
+                                sh "cf restart '${app_name}'"
+ 
+                            } else {
+                                echo "no build"
+                            }
+                        }
+                    }
+                }
+            }
+ 
+        }
+        stage("Deploy Cloudant to Bluemix") {
+            steps {
+                dir('Cloudant') {
+                    withDockerContainer(image: "node:6.13.0") {
+                        script {
+                            if (params.buildCloudant) {
+ 
+                                sh "npm --version"
+                                sh "npm update"
+                                sh "npm install"                   
+                                sh "sed -i -e 's/COUCH_URL_BLUEMIX/'$url_cloudant'/g' restore.sh"
+                def restore_sh = readFile 'restore.sh'
+                                echo "${restore_sh}"
+                sh "rm -rf dist"
+                                sh "sh export.sh"
+                                sh "cd dist"
+                                sh "npm install -g @cloudant/couchbackup"
+                                sh "sh restore.sh"
+ 
+                            } else {
+                                echo "no build"
+                            }
+                        }
+                    }
+                    withDockerContainer(image: "govau/cf-cli") {
+                        script {
+                            if (params.buildCloudant) {
+ 
+                                echo "MYKEY: ${org}"
+                                echo "REPO: ${space}"
+                                sh "yes '' | cf login -a 'https://api.ng.bluemix.net' -u apikey -p ${params.ApiKey}"
+                                sh "cf target -o '${org}' -s '${space}'"
+                                sh "cf set-env '${app_name}' CLOUDANT_BRANCH '${env.BRANCH_NAME}'"
+ 
+                            } else {
+                                echo "no build"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        stage('Deploy API Connect')
+        {
+            steps {
+                dir('Core')
+                {
+                    withDockerContainer (image: "vinhpt90/node-runtime:lasted")
+                    {
+                        script {
+                           if (params.buildApiConnect){
+                                sh "apic -v"
+                                sh "pwd"
+                                sh "sed -i -e 's/catalog-name/'$apic_catalog'/g' definitions/virtual-agent.yaml"
+                                sh "sed -i -e 's,https://apic-app-url,'$apic_app_url',g' definitions/virtual-agent.yaml"
+                                sh "cat definitions/virtual-agent.yaml"
+                                sh "apic login -k ${params.ApiKey} -s us.apiconnect.ibmcloud.com"
+                                // Publish APIC Gateway
+                                sh "apic publish definitions/virtual-agent_1.0.0.yaml --catalog ${apic_catalog} --organization ${apic_org} --server us.apiconnect.ibmcloud.com"
+                            } else {
+                                echo 'no deploy api connect'
+                            }
+                        }
+                    }
+                }
+            }
+        }   
+    }
+}

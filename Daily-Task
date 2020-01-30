@@ -1,0 +1,57 @@
+Hi# Please Search in google/youtube and complete the task.
+# Below every Task Mention the Status As Completed.
+
+#Task List:
+===================
+# Note after working please shutdown the instances,do not delete or terminate.
+# Below Code to be used while performing the task
+# https://github.com/betawins/spring3-mvc-maven-xml-hello-world.git
+
+ Task 1) Install Jenkisn in Aws Linux Image. # we will use this as our main server.In the Complete task list i will be talking about this jenkins server. -->COMPLETED
+ Task 2) Install jenkins in Aws Windows Image. -->COMPLETED
+ Task 3) Change the port number of jenkins in Aws Linux Image.-->COMPLETED
+ Task 4) Create user in jenkins and porvide him only view access by role based plugin. -->COMPLETED
+ Task 5) secure your jenkins server. # How to Secure your jenkins server. -->COMPLETED
+ Task 6) Create a sample jenkins freestyle job. -->COMPLETED
+ Task 7) Create a Maven job with above given code. -->COMPLETED
+ Task 8) Take Backup of your jenkins server. -->COMPLETED
+ Task 9) Create one more jenkins server and paste the backup file of your main jenkins server. # By this you should get the jobs availabe in you main server. -->COMPLETED
+ Task10) Create Master Salve Architecture.# one windows slave and one linux slave. # https://www.youtube.com/watch?v=hwrYURP4O2k -->COMPLETED
+ Task 11) Run sample jobs on both Slaves.# Job should be redirected using "Label". -->COMPLETED
+ Task 12) Install Tomcat on same jenkins server on port 8081. -->COMPLETED
+ Task 13) Create Tocmat users. -->COMPLETED
+ Task 13) Automated deployment to tomcat server. -->COMPLETED
+ Task 14) Install Docker on same jenkins,tomcat server. -->COMPLETED
+ Task 15) Pull a nexus image and make it running. -->COMPLETED
+ Task16) Create a sample job to build a artifact and push that war file to nexus server. #Refer CICD-Document -->COMPLETED
+ Task17) Install Ansible on same jenkins Server. -->COMPLETED
+ Task18) Write playbook to download the artifact from nexus and then deploy it to tomcat server.# Play book to be run manually. -->COMPLETED
+ Task19) Create a jenkins job where a war is pushed to nexus and then it is deployed through ansible.# ansible playbook should be integrated in jenkins. -->COMPLETED
+ Task20) Create a parametirezed job in jenkins.
+ Task 21) Install Docker. # Docker cannot be installed on RHEL instance,please use amazon linux image. -->COMPLETED
+ Task 22) Pull a tomcat container and deploy sample applciation manually. -->COMPLETED
+ Task 23) Now convert the container into image and push it to dockerhub. -->COMPLETED
+ Task24) Attach a volume to your docker container.
+ Task25) Learn briefly about port exposing and docker volume and  docker networking.
+ Task26) Install one ansible master and two agent.
+ Task27) Check the connection between these master and nodes.
+Task 28) Write sample playbook to push code to nexus.
+Task 29) sample playbook to push code to tomcat.
+Task30) Sample playbook to trigger a bash script. # Take any sample bash script and it should get triggered with ansible playbook. This is real time task done in our office.
+Task 31) write a script to display all the drives of your machine,check the drives whoes memory is more than 80% and display all the
+         files from the drive which is more than 80%. # For linux instance use bash script and for windows use powershell.
+Task32)Write a script to check all performances of your instance and display the output of only services which are using more than 80%
+       of memory.Align the services in Ascending order.
+Task33) Create a aws ec2 and create a user with sudo access and add him to wheel group. # we should able to login to ec2 with created user not with "ec2-user". -->COMPLETED
+Task34)Create a vpc and make it access to internet. -->COMPLEYED
+Task35)create a s3 bucket and host a static bucket init. -->COMPLETED
+Task36)Configure autoscaling group. -->COMPLETED
+Task37)configure load balancer. -->COMPLETED
+Task38)Atatch a new ebs to Instance. -->COMPLETED
+Task39)configure a domain name to your load balancer.
+Task40)COnfigure cloudfront
+
+what is the type of jenkns job used in ur cmpny
+freestyle project or maven or multipipeline?
+
+Ours is the pipeline job
