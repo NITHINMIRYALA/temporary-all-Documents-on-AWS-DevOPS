@@ -1,5 +1,13 @@
+iam not aware of all this questions..
+even i too dont know about this..
+i tried but not able to find many answers..
 
 1.Issues faced in ur company?---------------------------------->ANSWER
+
+jobs will get failed because of version not suporting or services got deprecated.
+docker images are not supporting the current npm version.
+
+this is wat i faced many times.
 
 2.How to launch ec2 instances if aws console access is not given to u?
 we can launch instances through command line.
