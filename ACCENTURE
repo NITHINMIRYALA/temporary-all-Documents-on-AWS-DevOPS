@@ -18,6 +18,9 @@ or we can write a playbook to up the instances..
 4.How to save the reports of evry build in jenkins?---------------------------->ANSWER
 with the help of HTML PUblisher Plugin.
 refrence check out this link : https://wiki.jenkins.io/display/JENKINS/HTML+Publisher+Plugin -->CANT WE DO THIS WITH ARCHIVE ARTIFACTS PLUGIN
+No we cant do with archive artifacts plugin,both plugins are different and both functionality is different.
+for refrence html plugin check out this.
+https://rharshad.com/jenkins-pipeline-as-code/
 
 5.For example if we configured a webpage in 1 instance say 192.168.0.1 can we access it from other ip if yes how?
 what i know is no..
