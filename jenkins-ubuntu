@@ -1,0 +1,34 @@
+
+Install java:
+============
+apt update
+
+apt install default-jre
+
+apt install default-jdk
+
+javac -version
+
+find / -name java
+
+vi /etc/environment
+
+JAVA_HOME="/usr/lib/jvm/java-11-openjdk-amd64"
+
+source /etc/environment
+
+echo $JAVA_HOME
+
+Install jenkins:
+================
+
+wget -q -O - https://pkg.jenkins.io/debian/jenkins.io.key | sudo apt-key add -
+
+
+sh -c 'echo deb http://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'
+
+apt update
+
+apt install jenkins
+
+systemctl status jenkins
