@@ -40,3 +40,11 @@ git revert <commit_id>
 git merge <branch_name>
 21) Clone one particular branch
 git clone -b <branch_name> <github_repo_url>
+22) Git stash is used to push files to stash memory
+git stash
+23) To view the stash list
+git stash list
+24) To get files out of stash memory
+git stash pop
+25) To get a specific file out of stash memory
+git stash pop stash{id}
