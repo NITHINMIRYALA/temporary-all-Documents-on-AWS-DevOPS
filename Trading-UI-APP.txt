@@ -1,0 +1,65 @@
+INSTALL NODEJS
+==============
+Step 1 – Configure Yum Repository
+First of all, You need to enable node.js yum repository in your system provided by the Node.js official website. You also need development tools to build native add-ons to be installed on your system.
+
+For Latest Release:-
+
+sudo yum install -y gcc-c++ make
+curl -sL https://rpm.nodesource.com/setup_14.x | sudo -E bash -
+For Stable Release:-
+
+sudo yum install -y gcc-c++ make
+curl -sL https://rpm.nodesource.com/setup_12.x | sudo -E bash -
+Step 2 – Install Node.js on Amazon Linux
+After adding a yum repository in your system let’s install the Node.js package. NPM will also be installed with node.js. This command will also install many other dependent packages on your system.
+
+sudo yum install -y nodejs
+Don’t Miss => Yarn Installation ( A Node Modules Manager)
+Step 3 – Check Version
+After installation check the installed version of Node.js. You can find more details about current version on node.js official website.
+
+node -v 
+
+v14.11.0
+Also, check the version of npm.
+
+npm -v 
+
+6.14.8
+Step 4 – Create Demo Web Server (Optional)
+This is an optional step. If you want to test your node.js install. Let’s create a web server with the “Welcome Node.js” text. Create a file demo_server.js
+
+vim demo_server.js
+and add the following content
+
+var http = require('http');
+http.createServer(function (req, res) {
+  res.writeHead(200, {'Content-Type': 'text/plain'});
+  res.end('Welcome Node.js');
+}).listen(3000, "127.0.0.1");
+console.log('Server running at http://127.0.0.1:3000/');
+Now start the webserver using the command.
+
+node --inspect demo_server.js
+
+Debugger listening on ws://127.0.0.1:9229/8136b052-2b35-402e-8c5c-1d15b027a970
+For help, see: https://nodejs.org/en/docs/inspector
+Server running at http://127.0.0.1:3000/
+Therefore the web server has been started on port 3000. Now access http://127.0.0.1:3000/ URL in browser.
+
+NODEJS-TRADING-UI-APPLICATION
+=============================
+1) INSTALL NODEJS PLUGIN
+1) Goto global tool configuration and add jdk and nodejs path
+3) Select "freestyle job"
+4) In "Build environment" checkbox "Provide Node & npm bin/ folder to PATH"
+5) In "Build environment" open execute shell and paste below commands
+npm audit fix
+npm install
+npm run build
+npm install pm2 -g
+cd /var/lib/jenkins/workspace/test/build/ && pm2 --name Trading-UI start npm -- start
+
+6) Access application on port 3000
+<your-ipaddress:3000>
