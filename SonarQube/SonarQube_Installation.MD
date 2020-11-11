@@ -5,6 +5,7 @@ SonarQube provides the capability to not only show health of an application but 
 
 ### Prerequisites
 1. EC2 instance with Java installed
+2. Use t2.large with atleast 20gb memory to run sonarqube.
 1. MySQL Database Server or MyQL RDS instance. **[Get help here](https://www.youtube.com/watch?v=vLaW6b441x0)**
 
 ### Installation
@@ -67,7 +68,7 @@ Edit sonar properties file to uncomment and provide required information for bel
   - sonar.jdbc.url=jdbc:mysql://`<RDS_DATABAE_ENDPOINT>:3306`/sonar?useUnicode=true&characterEncoding=utf8&rewriteBatchedStatements=true&useConfigs=maxPerformance&useSSL=false
   - sonar.web.host=`0.0.0.0`
   - sonar.web.context=`/sonar`
-
+# Sonar version 7 and higher cannot be run using root user,please switch to any other user and change the permissions to sonar directory and start sonar.
 Start SonarQube service 
 ```sh
 # cd /opt/sonar/bin/linux-x86-64/
