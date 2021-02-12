@@ -1,7 +1,7 @@
 -> What is Docker-Compose:
 
 It is a tool for defining and running multi container docker applciations.
-It uses Yaml files to configure applicaiton services.
+It uses YAML files to configure applicaiton services.
 Default file will be docker-compose.yml
 Can start/stop all services with a single command.
 Can scale up selected services when required.
