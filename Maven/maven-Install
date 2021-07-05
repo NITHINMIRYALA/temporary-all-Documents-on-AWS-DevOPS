@@ -10,7 +10,21 @@ wget https://mirrors.estointernet.in/apache/maven/maven-3/3.6.3/binaries/apache-
 3) Extract the maven tar file
 tar xvf apache-maven-3.6.3
 4) Export maven homepath in .bash_profile
-MVN_HOME:/opt/apache-maven-3.6.3/bin
+##################
+# .bash_profile
+
+# Get the aliases and functions
+if [ -f ~/.bashrc ]; then
+        . ~/.bashrc
+fi
+
+# User specific environment and startup programs
+MVN_HOME=/opt/apache-maven-3.6.3
+JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.282.b08-1.amzn2.0.1.x86_64
+PATH=$PATH:$HOME/bin:$JAVA_HOME/bin:$MVN_HOME/bin
+
+export PATH
+##########################################################
 5) Restart the .bash_profile
 source ~/.bash_profile
 6) Check for MVN_HOME
