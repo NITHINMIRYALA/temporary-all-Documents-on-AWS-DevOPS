@@ -1,12 +1,12 @@
 # SonarQube Installation
 
 SonarQube provides the capability to not only show health of an application but also to highlight issues newly introduced. With a Quality Gate in place, you can fix the leak and therefore improve code quality systematically.
-### Follow this Article in **[YouTube](https://www.youtube.com/watch?v=zRQrcAi9UdU)**
+
 
 ### Prerequisites
 1. EC2 instance with Java installed
 2. Use t2.large with atleast 20gb memory to run sonarqube.
-1. MySQL Database Server or MyQL RDS instance. **[Get help here](https://www.youtube.com/watch?v=vLaW6b441x0)**
+1. MySQL Database Server or MyQL RDS instance.
 
 ### Installation
 
@@ -15,11 +15,54 @@ Install java 1.8 version
 # yum install java-1.8*
 ```
 
-Install MySQL client version 
+Add mysql rpm Repository
 
  ```sh
-  # yum install mysql
+  # yum localinstall https://dev.mysql.com/get/mysql57-community-release-el7-9.noarch.rpm
  ```
+ 
+ Install MySQL 5.7
+ 
+ ```sh
+  # yum -y install mysql-community-server
+ ```
+ 
+ Start MySQL and Enable Start at Boot Time
+ 
+ ```sh
+  # systemctl start mysqld
+  # systemctl enable mysqld
+ ```
+ 
+ Check if mysql is running or not
+ 
+  ```sh
+  # netstat -na | grep 3306
+ ```
+ 
+ Configure the MySQL Root Password 
+ You will see default MySQL root password
+ 
+ ```sh
+ # grep 'temporary' /var/log/mysqld.log
+ ```
+ Login to mysql using the default password
+ ```sh
+ # mysql -u root -p
+ ```
+ 
+ Now replace the default password with a new and strong password
+ 
+ ```sh
+ # ALTER USER 'root'@'localhost' IDENTIFIED BY 'Admin@123';
+ # flush privileges;
+ ```
+ Test Using new password
+ 
+ ```sh
+ # mysql -u root -p
+ ```
+  
 Download stable SonarQube version from below website. 
 - Website: https://www.sonarqube.org/downloads/
 - Note: This Article written for SonarQube6.0  
@@ -27,15 +70,15 @@ Download stable SonarQube version from below website.
 Download & unzip SonarQube 6.0
 ```sh
 # cd /opt
-# wget https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-7.6.zip
-# unzip sonarqube-7.6.zip
-# mv /opt/sonarqube-7.6 /opt/sonar
+# wget https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-6.6.zip
+# unzip sonarqube-6.6.zip
+# mv /opt/sonarqube-6.6 /opt/sonar
 ```
-Allow RDS instance security group to access SonarQube server 
 
-Connect to RDS instance with database credentials
+
+Login to mysql
 ```sh 
-mysql -h <RDS_Instance_endpoint> -u <DB_USER_NAME> -p <DB_PASSWORD> 
+mysql -u root -p
 ```
 Create a new sonar database
 ```sh
@@ -44,8 +87,8 @@ CREATE DATABASE sonar CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 Create a local and a remote user
 ```sh
-CREATE USER sonar@localhost IDENTIFIED BY 'sonar';
-CREATE USER sonar@'%' IDENTIFIED BY 'sonar';
+CREATE USER sonar@localhost IDENTIFIED BY 'Sonar@123';
+CREATE USER sonar@'%' IDENTIFIED BY 'Sonar@123';
 ```
 
 Grant database access permissions to users 
@@ -62,18 +105,42 @@ SELECT User FROM mysql.user;
 FLUSH PRIVILEGES;
 QUIT
 ```
-So for you have configured required database information on RDS. Let’s Jump back to your EC2 instance and enable SonarQube properties file to connect his Database.
+So for you have configured required database information on mysql. Let’s Jump back to your EC2 instance and enable SonarQube properties file to connect his Database.
 
 ### ON EC2 Instance
 Edit sonar properties file to uncomment and provide required information for below properties. 
 
 - File Name: /opt/sonar/conf/sonar.properties
   - sonar.jdbc.username=`sonar`
-  - sonar.jdbc.password=`sonar`
-  - sonar.jdbc.url=jdbc:mysql://`<RDS_DATABAE_ENDPOINT>:3306`/sonar?useUnicode=true&characterEncoding=utf8&rewriteBatchedStatements=true&useConfigs=maxPerformance&useSSL=false
+  - sonar.jdbc.password=`Sonar@123`
+  - sonar.jdbc.url=jdbc:mysql://`localhost:3306`/sonar?useUnicode=true&characterEncoding=utf8&rewriteBatchedStatements=true&useConfigs=maxPerformance&useSSL=false
   - sonar.web.host=`0.0.0.0`
   - sonar.web.context=`/sonar`
+  
 # Sonar version 7 and higher cannot be run using root user,please switch to any other user and change the permissions to sonar directory and start sonar.
+
+Create new user
+
+```sh
+# useradd sabear
+# passwd sabear
+```
+Add user sabear to sudoers file
+```sh
+vi /etc/sudoers
+
+## Same thing without a password
+# %wheel        ALL=(ALL)       NOPASSWD: ALL
+sabear          ALL=(ALL)       NOPASSWD: ALL
+```
+Restart the sshd service
+```sh
+# systemctl restart sshd
+```
+Switch to newly created user
+```sh
+# sudo su sabear
+```
 Start SonarQube service 
 ```sh
 # cd /opt/sonar/bin/linux-x86-64/
@@ -108,10 +175,21 @@ SonarQube application uses port 9000. access SonarQube from browser
 ```sh
   http://<EC2_PUBLIC_IP>:9000/sonar
 ```
-###  Troubleshooting 
+###  NOTES
+1) Check whether you enabled port 9000 in EC2 instance security group
 
-1. Check whether you enabled port 9000 in EC2 instance security group
-2. Check whether you enabled EC2 instance IP range in RDS security group
+### Important Points:
 
-### Next Step
-- [x] [Integrate SonarQube with Jenkins](https://www.youtube.com/watch?v=k-3krTRuAFA)
+1) mysql port number : 3306
+2) sonarqube port: 9000
+3) sonarqube logs : /opt/sonar/logs
+4) We can find four different logs
+   a)access.log
+   b)es.log aka elastic search
+   c)sonar.log
+   d)web.log
+   
+ 
+Videos for reference: 
+sonarqube installation: https://www.youtube.com/watch?v=zRQrcAi9UdU
+mysql rds instance aws: https://www.youtube.com/watch?v=vLaW6b441x0
