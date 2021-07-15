@@ -10,6 +10,11 @@ SonarQube provides the capability to not only show health of an application but 
 
 ### Installation
 
+Install java 1.8 version
+```sh
+# yum install java-1.8*
+```
+
 Install MySQL client version 
 
  ```sh
