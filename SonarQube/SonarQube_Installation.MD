@@ -190,6 +190,8 @@ SonarQube application uses port 9000. access SonarQube from browser
    d)web.log
    
  
-Videos for reference: 
-sonarqube installation: https://www.youtube.com/watch?v=zRQrcAi9UdU
-mysql rds instance aws: https://www.youtube.com/watch?v=vLaW6b441x0
+### Videos for reference: 
+### sonarqube installation: 
+https://www.youtube.com/watch?v=zRQrcAi9UdU
+#### mysql rds instance aws: 
+https://www.youtube.com/watch?v=vLaW6b441x0
