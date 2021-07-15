@@ -175,6 +175,9 @@ SonarQube application uses port 9000. access SonarQube from browser
 ```sh
   http://<EC2_PUBLIC_IP>:9000/sonar
 ```
+Default credentials for sonarqube.
+Username : admin
+Password: admin
 ###  NOTES
 1) Check whether you enabled port 9000 in EC2 instance security group
 
