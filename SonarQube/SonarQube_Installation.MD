@@ -187,10 +187,10 @@ Password: admin
 2) sonarqube port: 9000
 3) sonarqube logs : /opt/sonar/logs
 4) We can find four different logs
- ###  a)access.log
- ###  b)es.log aka elastic search
- ###  c)sonar.log
- ###  d)web.log
+ a)access.log
+ b)es.log aka elastic search
+ c)sonar.log
+ d)web.log
    
  
 ### Videos for reference: 
