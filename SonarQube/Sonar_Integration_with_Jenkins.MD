@@ -51,7 +51,8 @@ Create a job to test SonarQube. Provide below sonar properties details in the jo
 - Build:
   - Invoke top-level Maven targets
         Goals : clean install
-  - `Execute SonarQube Scanner` > `Analysis properties`  (it is mandatary).  
+  - `Execute SonarQube Scanner` > `Analysis properties`  (it is mandatary). 
+     ```sh 
     	sonar.projectKey=Sabear
 	sonar.projectName=Sabear
 	sonar.projectVersion=1.0
@@ -60,7 +61,7 @@ Create a job to test SonarQube. Provide below sonar properties details in the jo
 	sonar.junit.reportsPath=target/surefire-reports
 	sonar.jacoco.reportPath=target/jacoco.exec
 	sonar.java.binaries=src/main/java/com/visualpathit/account/
-
+     ```
 Execute job to get analysis report. 
 
 
