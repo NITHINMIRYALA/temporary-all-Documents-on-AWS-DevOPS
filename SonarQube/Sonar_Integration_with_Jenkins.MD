@@ -46,11 +46,12 @@ To Get Authentication code follow below steps.
 
 Create a job to test SonarQube. Provide below sonar properties details in the job under build 
 -SCM:
+   ```
   - https://github.com/betawins/VProfile-1.git
-  
+   ```
 - Build:
-  - Invoke top-level Maven targets
-        Goals : clean install
+  - `Invoke top-level Maven targets`
+          `Goals : clean install`
   - `Execute SonarQube Scanner` > `Analysis properties`  (it is mandatary). 
      ```sh 
     sonar.projectKey=Sabear
