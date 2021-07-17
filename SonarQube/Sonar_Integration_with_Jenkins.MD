@@ -45,14 +45,22 @@ To Get Authentication code follow below steps.
 	Login to SonarQube server as a admin  `My Account` > `Security` > `Generate Token`
 
 Create a job to test SonarQube. Provide below sonar properties details in the job under build 
+-SCM:
+  - https://github.com/betawins/VProfile-1.git
+  
 - Build:
+  - Invoke top-level Maven targets
+        Goals : clean install
   - `Execute SonarQube Scanner` > `Analysis properties`  (it is mandatary).  
-     - sonar.projectKey=`Valaxy`
-     - sonar.projectName=`ValaxyDemo`
-     - sonar.projectVersion=`1.0`
-     - sonar.sources=`/var/lib/jenkins/workspace/$JOB_NAME/<PROJECT_NAME>/src`
+    	sonar.projectKey=Sabear
+	sonar.projectName=Sabear
+	sonar.projectVersion=1.0
+	sonar.sources=/var/lib/jenkins/workspace/sonar/src/
+	sonar.binaries=target/classes/com/visualpathit/account/controller/
+	sonar.junit.reportsPath=target/surefire-reports
+	sonar.jacoco.reportPath=target/jacoco.exec
+	sonar.java.binaries=src/main/java/com/visualpathit/account/
 
 Execute job to get analysis report. 
 
-### Next Step
-- [x] [Nexus Installation](https://www.youtube.com/watch?v=83AGz9huJGo)
+
