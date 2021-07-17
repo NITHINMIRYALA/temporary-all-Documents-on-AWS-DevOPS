@@ -53,7 +53,7 @@ Create a job to test SonarQube. Provide below sonar properties details in the jo
         Goals : clean install
   - `Execute SonarQube Scanner` > `Analysis properties`  (it is mandatary). 
      ```sh 
-    	sonar.projectKey=Sabear
+    sonar.projectKey=Sabear
 	sonar.projectName=Sabear
 	sonar.projectVersion=1.0
 	sonar.sources=/var/lib/jenkins/workspace/sonar/src/
