@@ -1,0 +1,31 @@
+MYSQL INSTALLATION:
+STEP 1:
+##install a repository by running the command below
+sudo yum install https://dev.mysql.com/get/mysql80-community-release-el7-5.noarch.rpm
+STEP 2:
+##cehck the repository file created or not
+ls /etc/yum.repos.d
+STEP 3:
+##install mysql8 server
+sudo amazon-linux-extras install epel -y
+sudo yum -y install mysql-community-server
+STEP 4:
+##start the server
+sudo systemctl start mysqld
+STEP 5:
+##check the status
+sudo sytemctl status mysqld
+STEP 6:
+##copy the below temporary password
+sudo grep 'temporary password' /var/log/mysqld.log
+sleep 5
+sudo mysql_secure_installation -p
+echo "enter the copied password"
+STEP 7:
+##update root passwd anytime
+mysql -uroot -p
+##At least one uppercase letter
+##At least one lowercase letter
+##At least one digit
+##At least one special character
+##Total password length is at least 8 characters.
