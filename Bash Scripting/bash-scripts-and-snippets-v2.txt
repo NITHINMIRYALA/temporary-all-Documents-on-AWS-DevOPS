@@ -1,0 +1,2574 @@
+Here is a set of small scripts, which demonstrate some features of
+bash programming. These are the building blocks of Bash Programming. 
+
+Type these snippets again and again to get comfortable. 
+
+
+//===================================================================================
+// set new prompt
+//===================================================================================
+
+PS1=">"
+PS1="[${LOGNAME}@$(hostname)] # "
+PS1="[${LOGNAME}] # "
+PS1='$PWD $ '
+
+
+//===================================================================================
+// set (and automatically create) shell variable
+//===================================================================================
+
+$ test="test"
+
+$ homedir='pwd'
+
+string="The man said \" hello \"."
+
+
+//===================================================================================
+// To use the variable within the shell, it is preceded by a $
+//===================================================================================
+homedir=$HOME
+cd $homedir
+
+
+//===================================================================================
+// how to print shell variable
+//===================================================================================
+
+echo PS1
+
+echo $PS1
+
+echo $USERNAME
+
+
+//===================================================================================
+// predefined shell variables
+//===================================================================================
+HOME    name of users login directory
+IFS     internal field separators
+PATH    search path used for finding commands
+PS1     shell prompt
+OSTYPE
+USERNAME
+SHELL 
+
+
+//===================================================================================
+// The shell supports pattern matching
+//===================================================================================
+* Match all characters in a string 
+? Match a single character
+
+ls *.dat
+
+
+//===================================================================================
+// Command Substitution
+//===================================================================================
+today=`date`
+
+
+//===================================================================================
+#---------------------------------------------------
+# empty sh script program
+#---------------------------------------------------
+#!/bin/sh
+
+
+#---------------------------------------------------
+# comments
+#---------------------------------------------------
+#!/bin/sh
+# this is comment
+
+
+#---------------------------------------------------
+# printing of string constant
+#---------------------------------------------------
+#!/bin/sh
+echo 'hello'
+echo "hello"
+echo hello
+
+
+#---------------------------------------------------
+# declaration and printing of string variable
+#---------------------------------------------------
+#!/bin/sh
+
+x='Wonderful new World'
+echo $x
+echo x # just string 'x'
+
+
+
+#---------------------------------------------------
+# call of other programs
+#---------------------------------------------------
+#!/bin/sh
+ls
+
+
+#---------------------------------------------------
+# indirect call of other programs
+#---------------------------------------------------
+#!/bin/sh
+
+x='pwd'
+$x
+
+x='ls -l'
+$x
+
+
+#---------------------------------------------------
+# indirect call with indirect parameters
+#---------------------------------------------------
+#!/bin/sh
+u='-l'
+
+x='ls '
+
+$x $u
+
+
+#---------------------------------------------------
+# print current shell name ???
+#---------------------------------------------------
+#!/bin/sh
+
+echo $SHELL
+
+
+#---------------------------------------------------
+# Anything enclosed in double quotes is passed on exactly 
+# as presented with the exception that the values of 
+# shell variables are substituted
+#---------------------------------------------------
+#!/bin/sh
+
+v1="abc "
+v2="$v1 d"
+echo $v1 $v2
+
+
+#---------------------------------------------------
+# Any matter enclosed in single quotes is passed on 
+# exactly as presented. The values of shell variables 
+# are not substituted. 
+#---------------------------------------------------
+#!/bin/sh
+
+v1="abc"
+v2='$v1 d'
+echo $v1 $v2
+
+
+#---------------------------------------------------
+# Back quotes are used to enclose commands. An item
+# enclosed in back quotes is replaced by the standard
+# output of the command. Shell variable values
+# are substituted within back quotes.
+#---------------------------------------------------
+#!/bin/sh
+
+date=`date`
+echo the date is $date
+
+
+#---------------------------------------------------
+# escaping
+#---------------------------------------------------
+#!/bin/sh
+
+msg=`echo Your Current Directory is \`pwd\``
+
+echo $msg
+
+
+#---------------------------------------------------
+# reading of text line from keyboard
+#---------------------------------------------------
+#!/bin/sh
+
+read x
+
+echo $x
+echo $x
+
+
+#---------------------------------------------------
+# reading of text line from keyboard with help comment
+# echo without new line at the end
+#---------------------------------------------------
+#!/bin/sh
+
+echo -n "Input text line=? "
+read x
+
+echo $x
+echo $x
+
+
+#---------------------------------------------------
+# syntax:  many commands in one line !!!!
+#---------------------------------------------------
+#!/bin/sh
+
+echo "a"; echo "b"; echo "c"
+
+var=5; echo `expr $var + $var` 
+
+
+#---------------------------------------------------
+# integer variable and its increment
+# does not works in sh !!!
+#---------------------------------------------------
+#!/bin/bash
+
+var=12345
+let var=$var+1 # let is important
+echo $var
+
+v=12345
+v=$v+1 # result "12345+1"
+
+
+#---------------------------------------------------
+# integer arithmetics - bash only !
+#---------------------------------------------------
+#!/bin/bash
+
+echo 'number=?' ; read x
+
+let y=$x+$x ; echo 'x+x=' $y
+
+let y=$x*$x ; echo 'square=' $y
+
+let y=$x/3 ; echo 'x/3=' $y
+
+let y=$x%7 ; echo 'x%7=' $y
+
+
+#---------------------------------------------------
+# integer arithmetics in sh !!! using expr - slow
+#---------------------------------------------------
+#!/bin/sh
+
+a=123
+b=12
+
+c=`expr $a + $b` # addition
+echo $c
+
+c=`expr $a \* $b` # multiplication
+echo $c
+
+c=`expr $a / $b` # division
+echo $c
+
+c=`expr $a % $b` # residual
+echo $c
+
+
+#---------------------------------------------------
+# very simple 'if' 
+#---------------------------------------------------
+#!/bin/sh
+
+echo 'number=?'
+read x
+
+if [ $x -eq 5 ]
+then
+	echo "five"
+fi	
+
+
+#---------------------------------------------------
+# if ... else
+#---------------------------------------------------
+#!/bin/sh
+
+echo 'number=?'
+read x
+
+if [ $x -eq 5 ]
+then
+	echo "five"
+else
+	echo "not 5"	
+fi	
+
+
+#---------------------------------------------------
+# if ... elif ... else
+#---------------------------------------------------
+#!/bin/sh
+
+echo 'number=?'
+read x
+
+if [ $x -eq 5 ]
+then
+	echo "five"
+elif [ $x -eq 7 ]
+then
+	echo "seven"	
+else
+	echo "not 5 and not 7"	
+fi	
+
+
+#---------------------------------------------------
+# comparison -lt  and  -gt, nested if
+#---------------------------------------------------
+#!/bin/sh
+
+echo -n 'number=?'
+read x
+
+if [ $x -gt 0 ]
+then
+	if [ $x -lt 10 ]
+	then
+		echo "0 < x < 10"
+	fi
+fi
+
+
+#---------------------------------------------------
+# while loop - print first 10 integers from 0
+#---------------------------------------------------
+#!/bin/bash
+
+x=0
+
+while  [ $x -lt 10 ]
+do
+	echo $x
+	let x=$x+1
+done
+
+
+#---------------------------------------------------
+# 10 random numbers generation
+#---------------------------------------------------
+#!/bin/bash
+
+i=0
+while [ $i -lt 10 ]
+do
+	x=$RANDOM
+	echo $x
+	let i=$i+1
+done
+
+
+#---------------------------------------------------
+# endless loop: interrupting by ctrl-c
+#---------------------------------------------------
+#!/bin/sh
+
+while [ 1 ]
+do
+	read x
+	echo $x$x
+done
+
+
+#---------------------------------------------------
+# divisors of integer number
+#---------------------------------------------------
+#!/bin/bash
+
+echo -n 'number=?'
+read x
+
+i=2 # possible divisor
+k=1
+let n=$x/2 # top limit for divisor
+
+while [ $i -le $n ]
+do
+	let k=$x%$i # residual
+	if [ $k -eq 0 ]
+	then
+		echo -n "Divisor= "
+		echo $i
+	if
+	let i=$i+1
+done
+
+
+#---------------------------------------------------
+# simple use of  for ... in ...
+#---------------------------------------------------
+#!/bin/sh
+
+for i in "abc" "xyz" 1 2 99
+do
+	echo $i
+done
+
+
+#---------------------------------------------------
+# use for as in C-programming
+# sum of the first n integer numbers
+#---------------------------------------------------
+#!/bin/bash
+
+echo -n "number=?"
+read n
+
+s=0 # here sum
+
+for((i=1; i <=n ; i++))
+do
+	let s=$s+$i 
+done
+
+echo "sum= "$s
+
+
+#---------------------------------------------------
+# operator case for selection of logical branches
+# end marker ;; of branch
+#---------------------------------------------------
+#!/bin/sh
+
+echo "input string=?"
+read str
+
+case "$str" in
+	abc) echo "string = abc" 
+		;;
+	xyz) echo "string = xyz" 
+		;;
+	*)   echo "not abc, not zyz" ;;
+esac
+
+
+#---------------------------------------------------
+# exit operator
+#---------------------------------------------------
+#!/bin/sh
+
+while [ 1 ]
+do
+	read x
+	echo $x
+	if [ $x -eq 0 ] # in $x must be number!
+	then
+		echo "script done ..."
+		exit 0
+	fi
+done
+
+
+#---------------------------------------------------
+# string comparing
+#---------------------------------------------------
+#!/bin/sh
+
+echo "Input string=?"
+read str
+
+if [ $str = "abc" ]
+then
+	echo "You got it!"
+else
+	echo "Its not 'abc'"
+fi
+
+
+#---------------------------------------------------
+# simple strings concatenation
+#---------------------------------------------------
+#!/bin/sh
+
+echo "Input string=?"
+read str
+
+s2=$str"AAAA"
+echo $s2
+
+s3="XXX"$s2
+echo $s3
+
+
+#---------------------------------------------------
+# strings concatenation
+#---------------------------------------------------
+#!/bin/sh
+
+echo "Input string=?"
+read str1
+
+echo "Input second string=?"
+read str2
+
+s3=$str1$str2 # it works!
+echo $s3
+
+s4=${str1}${str2} # it works too!
+echo $s4
+
+
+#---------------------------------------------------
+# testing whether a string is null
+#---------------------------------------------------
+#!/bin/sh
+
+echo "Input string=?"
+read str
+
+if [ $str ]
+then
+	echo "Not empty"
+else
+	echo "Empty"
+fi
+
+
+#---------------------------------------------------
+# length of string
+#---------------------------------------------------
+#!/bin/sh
+
+echo "Input string=?"
+read str
+
+leng=`expr length $str`
+echo "length= "$leng
+
+
+#---------------------------------------------------
+# how to insert string to constant string
+#---------------------------------------------------
+#!/bin/sh
+
+var="good"
+
+echo "This is $var test"
+
+
+#---------------------------------------------------
+# simplest function example
+#---------------------------------------------------
+#!/bin/sh
+
+#---------------------------
+func()
+{
+	echo "Inside function"
+}
+
+#---------------------------
+echo "Now function call..."
+func
+echo "end of main"
+
+
+#---------------------------------------------------
+# function can see variables of main program
+#---------------------------------------------------
+#!/bin/sh
+
+#--------------------------
+func()
+{
+	echo $var
+}
+#--------------------------
+
+var="test of global "
+func
+
+
+#---------------------------------------------------
+# pass of parameters to function
+#---------------------------------------------------
+#!/bin/sh
+
+#---------------------------------
+func()
+{
+	echo "We are in function now"
+	echo $0  # shell script name
+	echo $1  # first parameter
+	echo $2  # second parameter
+	echo "We leave function..."
+	exit 0
+}
+
+#---------------------------------
+
+func  123  "abc"
+
+
+#---------------------------------------------------
+# passing variable parameters
+#---------------------------------------------------
+#!/bin/bash
+
+#-------------------------------
+func2()
+{
+	let r=$1*$1
+	echo $r
+}
+#-------------------------------
+var=123
+func2 $var
+
+
+
+#---------------------------------------------------
+# recursive function example
+# calculation of factorial
+#---------------------------------------------------
+#!/bin/sh
+#-------------------------------
+factorial()
+{
+	if [ "$1" -gt "1" ]
+	then
+		i=`expr $1 - 1`
+		j=`factorial $i`
+		k=`expr $1 \* $j`
+		echo $k
+	else
+		echo 1
+	fi
+}
+#-------------------------------
+read x
+factorial $x
+
+
+
+#---------------------------------------------------
+# using of function library ????????
+#---------------------------------------------------
+
+file with name my.lb
+
+func2()
+{
+	echo $1$1
+}
+func3()
+{
+	echo $1$1$1
+}
+
+shell program:
+
+#!/bin/sh
+
+./my.lb
+
+var=123
+
+func2 123
+
+func3 123
+
+
+
+#---------------------------------------------------
+# floating point numbers
+#---------------------------------------------------
+#!/bin/sh
+
+# does not support !!!!
+
+
+#---------------------------------------------------
+# simpiest array : declaration, element access and assignment
+#---------------------------------------------------
+#!/bin/bash
+
+arr=(aa bb cc dd)
+
+echo ${arr[0]} # curly bracket notation
+echo ${arr[1]}
+echo ${arr[2]}
+echo ${arr[3]}
+
+arr[2]="CCCCCCC"
+echo ${arr[2]}
+
+
+#---------------------------------------------------
+# number of elements in array
+#---------------------------------------------------
+#!/bin/bash
+
+arr=(aa bb cc dd)
+
+n=${#arr[@]}
+echo $n
+
+
+#---------------------------------------------------
+# array with filenames of current directory
+#---------------------------------------------------
+#!/bin/sh
+
+arr=(*)  # * is list of all file and dir names
+
+n=${#arr[@]}
+echo "number of files and dirs "$n
+
+echo ${arr[0]}
+echo ${arr[1]}
+
+
+#---------------------------------------------------
+# print all array elements -not good
+# works then no holes in indexes
+#---------------------------------------------------
+#!/bin/bash
+
+arr=(aa bb cc dd ee ff gg)
+n=${#arr[@]}
+i=0
+while test $i -lt $n
+do
+	echo ${arr[$i]}
+	let i=$i+1
+done
+
+
+#---------------------------------------------------
+# dynamic expansion of array
+# one array element in reality is couple (index, value)
+#---------------------------------------------------
+#!/bin/bash
+
+arr=()
+
+n=${#arr[@]}
+echo "number of array elements "$n
+
+arr[0]=a
+n=${#arr[@]}
+echo "number of array elements "$n
+
+arr[1]=b
+n=${#arr[@]}
+echo "number of array elements "$n
+
+arr[2]=c
+n=${#arr[@]}
+echo "number of array elements "$n
+
+arr[10]=h
+n=${#arr[@]}
+echo "number of array elements "$n
+
+
+echo ${arr[10]}
+
+echo ${arr[4]} # empty string
+echo ${arr[6]} # empty string
+
+
+#---------------------------------------------------
+# get all array and print it
+#---------------------------------------------------
+#!/bin/bash
+
+arr=(aa bb cc dd ee ff gg)
+
+echo ${arr[*]} # all array
+
+echo ${arr[@]:0}   # aa bb cc dd ee ff gg
+
+echo ${arr[@]:1}   # bb cc dd ee ff gg
+
+echo ${arr[@]:2:3} # cc dd ee
+
+for i in ${arr[*]}
+do
+	echo $i
+done
+
+
+#---------------------------------------------------
+# adding element to array
+#---------------------------------------------------
+#!/bin/bash
+
+arr=(aa bb cc dd ee ff gg)
+
+echo ${arr[*]}
+
+arr=( "${arr[@]}" "newElem" ) # from right
+
+echo ${arr[*]}
+
+arr=( "newElem" "${arr[@]}" ) # from left
+
+echo ${arr[*]}
+
+
+#---------------------------------------------------
+# move last element from array
+#---------------------------------------------------
+#!/bin/bash
+
+
+arr=(aa bb cc dd ee ff gg)
+
+echo ${arr[*]}
+
+unset arr[${#arr[@]}-1]	#  move last element
+echo ${arr[*]}
+
+
+#---------------------------------------------------
+# copying of array
+#---------------------------------------------------
+#!/bin/bash
+
+arr=(aa bb cc dd ee ff gg)
+
+echo ${arr[*]}
+
+arr2=( "${arr[@]}" )
+
+echo ${arr2[*]}
+
+
+#---------------------------------------------------
+# get substring from string
+#---------------------------------------------------
+#!/bin/bash
+
+echo "long string input=?"
+read st
+
+st2=${st:2:4}
+
+echo $st2
+
+
+#---------------------------------------------------
+# substring replacement "abc" to "xyz"
+#---------------------------------------------------
+#!/bin/bash
+
+echo "string input=?"
+read str
+
+st2=${str/abc/xyz} # only ones
+
+echo $st2
+
+
+#---------------------------------------------------
+# search of character 'a' in a string
+#---------------------------------------------------
+#!/bin/sh
+
+echo "string input=?"
+read str
+
+pos=`expr index $str a`
+
+echo "position of the first 'a' = "$pos
+
+
+#---------------------------------------------------
+# string list counting
+#---------------------------------------------------
+#!/bin/sh
+
+for i in aa bb cc dd ee ff gg hh
+do
+	echo $i
+done
+
+
+#---------------------------------------------------
+# command line arguments
+# separated by spaces
+#---------------------------------------------------
+#!/bin/sh
+
+echo $0  # script file name
+
+echo $1  # first argument
+echo $2  # second argument
+echo $3  # third argument
+
+
+#---------------------------------------------------
+# command line arguments without script name number
+# all command line without script name
+#---------------------------------------------------
+#!/bin/sh
+
+echo $#  # argument number
+
+echo $*  # command line
+
+echo $@
+
+
+
+#---------------------------------------------------
+# get all files and dir names
+#---------------------------------------------------
+#!/bin/sh
+
+echo *  # file and dir names of current dir
+
+for i in *
+do
+	echo $i
+done
+
+echo ../* # file and dir names of parent dir
+
+*/ just close comments
+
+
+#---------------------------------------------------
+# file search from root dir      ???????
+# file name - parameter from command line
+#---------------------------------------------------
+#!/bin/sh
+
+start=$HOME
+date
+find $start -name $1 -print
+
+
+#---------------------------------------------------
+# list of all files with extension .txt     !!!!!!
+#---------------------------------------------------
+#!/bin/sh
+
+echo *.txt
+
+
+#---------------------------------------------------
+# combine a set of text files in one file use
+# script >targetfile.lst , not txt-file !!!
+#---------------------------------------------------
+#!/bin/sh
+
+lst=*.txt
+
+for i in $lst
+do
+	echo
+	echo "======================================"
+	echo "File "$i
+	echo "======================================"
+	cat <$i
+done
+
+
+#---------------------------------------------------
+# create new file and write string to it
+# file name from command string - variable $1
+#---------------------------------------------------
+#!/bin/sh
+
+echo "String=?"
+read str
+
+echo $str >$1
+
+
+#---------------------------------------------------
+# read textlines from console and add them to file
+# file name from command string - variable $1
+#---------------------------------------------------
+#!/bin/sh
+
+echo "Add strings=?"
+str="1"
+
+while [ $str ]
+do
+	read str
+	echo $str >>$1
+done
+
+
+
+#---------------------------------------------------
+# read first string from text file
+#---------------------------------------------------
+#!/bin/sh
+
+read str <$1
+echo $str
+
+
+
+#---------------------------------------------------
+# text file reading
+# script res.txt
+#---------------------------------------------------
+#!/bin/sh
+
+str="1"
+
+while [ $str ]
+do
+	read str
+	echo $str
+	echo $str
+done
+
+
+
+isRoot.sh
+====================================================
+isRoot()
+{
+# Make sure only root can run our script
+if [[ $EUID -ne 0 ]]; then
+   echo "This script must be run as root" 1>&2
+   exit 1
+fi
+}
+====================================================
+
+banner.sh
+====================================================
+#!/bin/bash
+#Clears screen automatically due to the uisage of EOF
+banner(){
+clear
+cat << "EOF"
+_   _
+| | | |
+| |_| | ___ _ __ _ __ ___   ___  ___
+|  _  |/ _ \ '__| '_ ` _ \ / _ \/ __|
+| | | |  __/ |  | | | | | |  __/\__ \
+\_| |_/\___|_|  |_| |_| |_|\___||___/
+SNMP framework created by AXANO
+EOF
+}
+===================================================
+
+whileloop.sh
+===================================================
+#!/bin/sh
+#
+#Script to test while statement
+#
+#
+if [ $# -eq 0 ]
+then
+   echo "Error - Number missing form command line argument"
+   echo "Syntax : $0 number"
+   echo " Use to print multiplication table for given number"
+exit 1
+fi
+n=$1
+i=1
+while [ $i -le 10 ]
+do
+  echo "$n * $i = `expr $i \* $n`"
+  i=`expr $i + 1`
+done
+===================================================
+
+check-range.sh
+===================================================
+#!/bin/bash
+# To check a number is in range or not
+if [ "$1" -gt 0 -a "$1" -lt 10 ]
+#if [[ "$1" =~ ^[0-9]+$ ]]; To Check input is a number
+then echo "Number is in Range 0-9";
+else echo "Number is not in Range 0-9";
+fi
+====================================================
+
+sort_csv.sh
+==========================================================
+#!/bin/bash
+if [ "$2" != "" ]; then
+	head -n 1 "$1" && tail -n +2 "$1" | sort -t ',' -k "$2"
+else
+	head -n 1 "$1" && tail -n +2 "$1" | sort -t ',' -k 1
+fi
+
+==========================================================
+
+function_available_command.sh
+==========================================================
+#!/usr/bin/env bash
+
+# This checks to see if a command is available on a linux system
+function is_command() {
+    if [ -x "$(command -v ${1})" ]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+## Examples
+#if is_command "yum" ; then
+#  echo "This is probably a Centos or Redhat box, because yum is it's package manager"
+#fi
+#
+#if is_command "pip" ; then
+#  echo "Python package installer exists pip"
+#fi
+
+==========================================================
+verify_root_user.sh
+==========================================================
+#!/usr/bin/env bash
+if [ $(whoami) != 'root' ]; then
+        echo "Must be root to run $0"
+        exit 1;
+fi
+==========================================================
+fuzz.sh
+==========================================================
+#!/usr/bin/env bash
+
+# fuzz.sh: sleep for a random amount of time (up to 15 seconds by default).
+# see https://github.com/pepaslabs/bash_scripts
+#
+# usage: fuzz.sh [seconds]
+#
+# add fuzz.sh to your crontab to prevent a group of machines from causing
+# a "stampeded":
+# 
+#   * * * * * fuzz.sh && script_which_is_run_by_a_bunch_of_machines.sh
+#
+# see also https://twitter.com/hmason/status/238417862992199680
+
+delay=${1:-15}
+sleep $(( ${RANDOM} % ${delay} ))
+===========================================================
+
+###Send email using mail command on linux
+===========================================================
+mail -s "My subject line" somebody@domain.com < emailbody.txt
+
+This command will email the contents of emailbody.txt to somebody@domain.com with the subject My subject line.
+=========================================================
+
+
+###bulk rename with 'rename' command on linux
+===========================================================
+# command: rename <options> 's/<old>/<new>/ <where>
+ 
+# first testing with param -n
+rename -n 's/(\w+)\s(.*)\.pdf/$1\.pdf/' *
+ 
+# placeholder $1 is the first group matched, etc
+ 
+# execute with verbose
+rename -v 's/(\w+)\s(.*)\.pdf/$1\.pdf/' *
+
+=========================================================
+
+###Snippet for calculating script run-time
+===========================================================
+Add this to the beginning of the script:
+START=$(date +%s)
+
+Add following at the end or exit location:
+
+END=$(date +%s)
+DIFF=$(( $END - $START ))
+DIFF=$(( $DIFF / 60 ))
+
+=========================================================
+
+
+###Parsing & processing script parameters / arguments:
+===========================================================
+Scripts are often required to have user inputs in terms of arguments passed after script. Below code snippet is a simple method to capture the arguments passed.
+
+while [ "$1" != "" ]; do
+    case $1 in
+        -s  )   shift	
+		SERVER=$1 ;;  
+        -d  )   shift
+		DATE=$1 ;;
+	--paramter|p ) shift
+		PARAMETER=$1;;
+        -h|help  )   usage # function call
+                exit ;;
+        * )     usage # All other parameters
+                exit 1
+    esac
+    shift
+done
+
+
+Above snippet in shell script paramter_test.sh will behave as follows:
+
+sh parameter_test.sh -s myserver -d 20151225 --parameter SomeValue
+
+
+Confirm the mandatory parameters
+
+if [ -z $SERVER ] || [ -z $DATE ]; then
+	echo "Please specify both server and date";
+	exit 1;
+fi;
+
+=========================================================
+
+###Change directory before processing your script:
+===========================================================
+# Sanitizing & verifying the directory status is very important before progressing the script. You donot want to mistakenly execute the commands in a wrong directory. We should verify if directory is present and have sufficient permission for the user.
+Followingg code snippet takes care of the same.
+
+changedir()
+{
+	DIR_NAME=$1
+	# Check if the directory exist?
+	[ -d "$DIR_NAME" ] || {
+		echo Dir: $DIR_NAME does not exist 
+		exit 1
+	}
+
+	# Check if the directory is readable
+	[ -r "$DIR_NAME" ] || {
+		echo Dir: $DIR_NAME not readable
+		exit 2
+	}
+
+	# Check if we have execute perms on directory
+	[ -x "$DIR_NAME" ] || {
+		echo Dir: cannot cd to $DIR_NAME
+		exit 3
+	}
+
+	# Check if the directory is writable
+	[ -w "$DIR_NAME" ] || {
+		echo Dir: $DIR_NAME not writeable
+		exit 4
+	}
+
+	cd $DIR_NAME
+	echo "Present directory $DIR_NAME"
+}
+
+
+
+To safely change the directory call the function as follows:
+changedir /data/app/
+
+=========================================================
+
+###Verifying if previous command was successful
+===========================================================
+When a processing of command depends on success or failure of previous command we can use the exit status. It can be checked using $?.
+
+if [ $? -ne 0 ]; then
+	echo "The command was not successful.";
+	#do the needful / exit
+fi;
+
+=========================================================
+
+###Generating script logs with timestamp
+===========================================================
+Just as the duration of script it’s useful to have timestampped log. Use following function to log time for every output.
+
+log() {
+     echo [`date +%Y-%m-%d\ %H:%M:%S`] $*
+}
+
+Call the function as follows instead of simply “echo”ing.
+log "my string to be logged"
+
+=========================================================
+
+###Checking if process is running
+===========================================================
+#This code snippet is used often when a script progress requires the known status of any particular system process.
+A usual scenario say we need MySQL down before progressing further in script, we will use following shell function.
+
+# Define shell function
+check_process() {
+	echo "Checking if process $1 exists..."
+	[ "$1" = "" ]  && return 0
+	PROCESS_NUM=$(ps -ef | grep "$1" | grep -v "grep" | wc -l)
+	if [ $PROCESS_NUM -ge 1 ];
+	then
+	        return 1
+	else
+	        return 0
+	fi
+}
+
+# Check for MySQL process and make the decision
+check_process mysql;
+CHECK_RET=$?;
+if [ $CHECK_RET -ne 0 ]; 
+	# code block for process exists 
+else
+	# code block for process not present
+fi;
+
+=========================================================
+
+###Colouring your script output
+===========================================================
+A readable and formatted output is good to have. Following code snippet helps you beautify your script output, colorizing or highlighting them.
+
+Define variables:
+txtund=$(tput sgr 0 1)    # Underline
+txtbld=$(tput bold)       # Bold
+txtred=$(tput setaf 1)    # Red
+txtgrn=$(tput setaf 2)    # Green
+txtylw=$(tput setaf 3)    # Yellow
+txtblu=$(tput setaf 4)    # Blue
+txtpur=$(tput setaf 5)    # Purple
+txtcyn=$(tput setaf 6)    # Cyan
+txtwht=$(tput setaf 7)    # White
+txtrst=$(tput sgr0)       # Text reset
+
+Use them as:
+echo "${txtbld}This is bold text output from shell script${txtrst}"
+echo "${txtred}This is coloured red except ${txtblu}this is blue${txtrst}"
+
+${txtrst} will reset the terminal.
+
+
+=========================================================
+
+###Reading variables from config file
+===========================================================
+#Create a config file with contents as follows:
+key1=value1
+key2=value2
+
+Add following line in the beginning of the shell script:
+
+. configfile
+
+This will load the key value pairs and you may verify & access the values as $key1 or $key2.
+=========================================================
+
+###Looping over files in a folder
+===========================================================
+# Below code snippet is quite simple as a concept of FOR loop we might need to loop over the files to perform operations.
+#!/bin/bash
+PATH=/path/to/dir/
+FILES=*.sql
+for f in $PATH$FILES
+do
+	# Code block for processing each file $f
+done
+
+=========================================================
+
+###Using SWITCH…CASE
+===========================================================
+Following code snippet is a SWITCH…CASE for shell script often used for taking actions based on variable value.
+
+ase $VARIABLE in
+		VALUE-1) # CODE BLOCK FOR VALUE-1
+			;;
+
+		VALUE-2|VALUE-3) 
+			# CODE BLOCK FOR VALUE-2 OR VALUE-3
+		 	;;
+
+		*) echo "Wrong option, exiting.";;
+	esac
+
+=========================================================
+
+###The sendEmail Function
+===========================================================
+Following is the ready to use sendEmail function for your shell scripts. You may put the function definition in the beginning of your shell script and use to send emails.
+All you need to set is variable values for email-content ($content), email-subject ($subject) and email-list ($email_list). Rest is only making a call to the function (sendEmail).
+This handy function also notes the script runtime.
+
+# sendEmail Function - mail & exit.
+START=$(date +%s)
+sendEmail() {
+	scripttime=0;
+	END=$(date +%s)
+	DIFF=$(( $END - $START ))
+	if [ $DIFF -le 60 ]; then
+		scripttime="$DIFF seconds.";
+	else
+		DIFF=$(( $DIFF / 60 ))
+		scripttime="$DIFF minutes.";
+	fi;
+	content="$content. Exec Time: $scripttime"
+	echo $content | mail -s "$subject" $email_list
+	exit;
+}
+# sendEmail Function - end.
+
+=========================================================
+
+###Simple Shell Script to Monitoring Disk Space on a Linux Machine
+===========================================================
+This article explain a way to get a mail as soon as the disk usage reaches to its critical level to avoid issues later. To set a simple monitor on Linux / Unix, I have two simple scripts:
+
+DSAlert.sh : Shell script for retrieving disk space percentages and put in to a cron job.
+DiskSpace_Alert.pl : Perl script for sending an email.
+Following is the disk monitor shell script which will execute the perl file for sending alert email.
+
+#DSAlert.sh
+#!/bin/sh
+#Retrive disk space info
+df=`df -Pl  | grep "^/dev" | awk '{print $5, $6}' | sed "s/%//"`
+#Reference: df
+echo “$df” | while read percent fs
+do
+#If Disk Usage increases above 90% send an email.
+if [ $percent -ge 90 ] ; then
+#Calling a perl file with parameters for sending an email.
+`/opt/lampp/bin/perl DiskSpace_Alert.pl $fs is $percent percent full`
+fi
+done
+
+Perl Script for sending an email:
+
+# DiskSpace_Alert.pl
+#!perl
+use MIME::Lite;
+
+#Reference : Mime-Lite
+
+# set up email
+$to = “my-mail-id\@domain.com”;
+$from = “Diskmonitor\@ServerName.com”;
+$subject = “Disk_Alert”;
+$message = “Disk Space issue.\nActions Required:\n”.”@ARGV”;
+# send email
+email($to, $from, $subject, $message, $file);
+
+# email function
+sub email
+{
+# get incoming parameters
+local ($to, $from, $subject, $message, $file) = @_;
+# create a new message
+$msg = MIME::Lite->new(
+From => $from,
+To => $to,
+Subject => $subject,
+Data => $message);
+# send the email
+
+MIME::Lite->send(‘smtp’, ‘localhost’, Timeout => 60);
+$msg->send();
+}
+Setting up a crontab for monitoring:
+
+Crontab –e
+* * * * * sh  full/path/to/DSAlert.sh
+
+And we’re done with the Linux/Unix Disk Monitoring alerts.
+
+Instructions for setting up timing for crontab:
+
++----------------> minute (0 - 59)
+|  +-------------> hour (0 - 23)
+|  |  +----------> day of month (1 - 31)
+|  |  |  +-------> month (1 - 12)
+|  |  |  |  +----> day of week (0 - 6) (Sunday=0 or 7)
+|  |  |  |  |
+*  *  *  *  *
+
+=========================================================
+
+### How to echo colored text in linux shell script
+===========================================================
+Having a colourful display on shell script is something that’d beautify your experience. Using colour text and echos will help you to highlight and distinguish the shell output on a linux prompt.
+
+Here’s how you can have colored text in linux shell, try following command on your bash:
+
+bash $] tput setaf 1
+You will see your text color will turn red.
+To reset it you can type following command to make text color white
+bash $] tput setaf 7
+
+or to reset everything again text modes
+bash $] tput sgr0
+
+Same things you can use in your bash script to colorize output.
+
+Create following sample bash script for colourize echo:
+
+#try.sh
+txtrst=$(tput sgr0) # Text reset
+txtred=$(tput setaf 1) # Red
+echo “Welcome to ${txtred} kedar.nitty-witty.com ${txtrst}!”
+
+The coloured text output is as follows::
+
+colored-shell-script
+
+If you need more colors, you may define them as follows in shell script:
+
+Other variables you can define as follows:
+txtgrn=$(tput setaf 2) # Green
+txtylw=$(tput setaf 3) # Yellow
+txtblu=$(tput setaf 4) # Blue
+txtpur=$(tput setaf 5) # Purple
+txtcyn=$(tput setaf 6) # Cyan
+txtwht=$(tput setaf 7) # White
+txtrst=$(tput sgr0) # Text reset.
+
+Following are the tput details further:
+tput setab [1-7] : Set a background colour using ANSI escape
+tput setb [1-7] : Set a background colour
+tput setaf [1-7] : Set a foreground colour using ANSI escape
+tput setf [1-7] : Set a foreground colour
+
+tput Text Mode Capabilities:
+
+tput bold : Set bold mode
+tput dim : turn on half-bright mode
+tput smul : begin underline mode
+tput rmul : exit underline mode
+tput rev : Turn on reverse mode
+tput smso : Enter standout mode (bold on rxvt)
+tput rmso : Exit standout mode
+tput sgr0 : Turn off all attributes (doesn’t work quite as expected)
+
+=========================================================
+
+###crontab not working with dynamic date filename – rhel linux
+===========================================================
+I have done it for so many times, setting a cronjob.
+Today I was tring to set a simple cronjob which will output the log file with timestamp attached filename.
+
+Hourly running cron entry was:
+
+0 * * * * perl demo.pl > demo-out_`date "+%Y-%m-%d_%H-%M"`.log
+
+Running the same command on shell prompt was working fine. Execute permissions and path were proper. But it kept on failing to create the proper log!!
+
+I changed the crontab as follows, added \ before % to escape and voila!!
+
+Things worked !!
+
+0 * * * * perl test.pl > test-out_`date "+\%Y-\%m-\%d_\%H-\%M"`.log
+
+A quick lesson.
+
+Good to note some of the date changers in linux for finding yesterdays and tomorrows and so on:
+date –date=”1 days ago”
+date –date=”yesterday”
+date –date=”next day”
+date –date=”-1 day”
+date –date=’tomorrow’
+date –date=’1 day’
+date –date=’10 day’
+date –date=’10 week’
+date –date=’10 month’
+date –date=’10 year’
+date –date=”next Friday”
+To escape problems you should learn to escape “special characters” – Krex
+
+=========================================================
+
+###Rename files: replace space by _ in linux:
+===========================================================
+for files in *; do mv "$files" `echo $files | tr ' ' '_'`; done
+
+=========================================================
+
+###Change case of multiple file names
+===========================================================
+for files in *; do mv $files `echo $files | tr '[:upper:]' '[:lower:]'`; done
+
+=========================================================
+
+###Find files having large size:
+===========================================================
+ls -hlRtr | awk '{print $5 " " $6 "-" $7 " "$9}' | grep '[0-9]G '
+
+#– Variants: grep ‘[0-9][0-9][0-9]M’ will give you files having sizes xxxMBs
+=========================================================
+
+###Find and replace text from multiple files
+===========================================================
+find ./ -type f | xargs perl -pi -w -e 's/SEARCH-TERM/REPLACE-TERM/g;'
+
+=========================================================
+
+###Find text in file
+===========================================================
+find . -name "*.php" | xargs grep " order by l.ID "
+find . -name "*.pl" | xargs grep "virtualTourUrl"
+grep *.* "Pattern"
+=========================================================
+
+###Find and Delete file within last one hour
+===========================================================
+find /some/dir -type f -mmin +60 | xargs rm -f
+find . -cmin +60 -exec rm -f {} \;
+=========================================================
+
+###Find files last modified / accessed – copy to other directory:
+===========================================================
+find . -mtime +1 -exec cp {} TARGET_FOLDER \;
+
+– atime..last access
+– mtime..last modify
+– ctime..last status change
+
+=========================================================
+
+###Replace content of a file:
+===========================================================
+perl -pi -e "s/kedar/radek/g" a.txt
+perl -pi -e "s/OLDTEXT=OLDVALUE/NewText=NewValue/g" *.*
+=========================================================
+
+###Find a.txt and Replace content by string comparison and save in to other file
+===========================================================
+find ./ -name "a.txt" -exec sed 's/radek/kedar/g' {} \; > b.txt
+
+=========================================================
+
+###Find files modified in last n days
+===========================================================
+find *.sql -mtime +n -exec ls -l --sort=time {} \;
+
+=========================================================
+
+###A quick sftp – secure file transfer program to transfer files between linux/unix machines:
+===========================================================
+sftp usename@hostname/ipaddress
+password: ****
+sftp> ls #executed on remote machine
+sftp> lls #executed on local machine
+sftp> get *.* #download all files from remote machine to local machine
+sftp> put *.* #upload files to remote machine
+
+- Create directory in sftp: mkdir [For local: lmkdir]
+- Change directory in sftp: cd [For local: lcd]
+- get / mget : download files to local linux machine
+- put / mput : upload files to remote linux machie
+
+=========================================================
+
+### There's cd - to go to the previously-visited directory:
+===========================================================
+/usr/local/bin> cd /i/am/a/banana
+/i/am/a/banana> cd -
+/usr/local/bin>
+
+=========================================================
+
+###all those useful incarnations of the BASH for-loop
+===========================================================
+for file in *.txt; do ls $file; done
+
+for item in $(echo foo bar baz); do echo $item; done
+
+for num in {0..9}; do echo $num; done
+
+=========================================================
+
+###prints the 10 most used command
+===========================================================
+history | awk '{print $2}' | awk 'BEGIN {FS="|"}{print $1}' | sort | uniq -c | sort -n | tail | sort -nr
+
+=========================================================
+
+###At the beginning of a script that must be run as root
+===========================================================
+if [ `id -u` != 0 ]; then
+   echo "This script must be run as root" 1>&2
+   exit 1
+fi
+
+=========================================================
+
+###remove blank lines and comment lines
+===========================================================
+grep -v '^[ \t]*$\|^[ \t]*#' /etc/ssh/sshd_config
+
+=========================================================
+
+###removes unwanted directories 
+===========================================================
+find . -type d -name .svn | xargs rm -rf   #removes .svn directy anywhere in the path
+
+=========================================================
+
+###
+===========================================================
+#!/bin/sh
+
+if [ "$1" == "" ] || [ "$2" == "" ]; then
+echo "Usage jarfinder.sh  "
+    exit
+fi
+
+SEARCH=`echo $2 | sed -e 's/[\\\/]/./g'`
+
+echo Searching jars and zips in $1 for "$SEARCH"
+
+find $1 -type f -printf "'%p'\n" | egrep "\.(jar|zip)'$" | sed -e "s/\(.*\)/echo \1 ; jar tvf \1 | sed -e 's\/^\/ \/' | grep -i \"$SEARCH\"/" | sh
+
+=========================================================
+
+###truncate-file-to-zero-bytes.txt
+===========================================================
+: > truncate-file-to-zero-bytes.txt    # without changing its permissions  
+
+=========================================================
+
+###what this script will do
+===========================================================
+#!/bin/bash
+
+PIDFILE="$0.pid"
+touch $PIDFILE
+LASTPPID=`cat $PIDFILE`
+kill -0 $LASTPPID 2>/dev/null
+ERR=$?
+if [ $ERR -eq 0 ]; then
+    # Still running
+    echo `date` - "Exit, previous copy (pid $LASTPPID) still running."
+    exit
+fi
+
+nohup tail -f /var/log/wtmp >/dev/null &
+PID=$!
+echo $PID >$PIDFILE
+
+echo PID=$PID
+ps -ef | grep "$PID"
+
+=========================================================
+
+###what this script will do
+===========================================================
+#!/bin/sh
+
+find . -name "*.exe" | xargs chmod u+x
+find . -name "*.dll" | xargs chmod u+x
+
+=========================================================
+
+###ssh tunnel
+===========================================================
+ssh -X -L 5901:10.5.128.5:5901 -L 9000:10.5.128.5:3690 -L 9001:10.5.128.5:22 -L9418:10.5.128.5:9418 -R 6372:localhost:6372 root@home
+
+=========================================================
+
+
+### Redirect stdout to /dev/null
+===========================================================
+>/dev/null
+=========================================================
+
+###Redirect stderr to /dev/null
+===========================================================
+2>/dev/null
+
+=========================================================
+
+###Redirect stdout & stderr to /dev/null
+===========================================================
+>/dev/null 2>&1
+
+=========================================================
+
+###Redirect to stderr
+===========================================================
+>&2
+
+=========================================================
+
+### cat until EOF
+===========================================================
+cat <<-EOF >/path/to/file
+
+EOF
+
+
+The - option to mark a here document limit string (<<-EOF) suppresses leading tabs (but not spaces) in the output. This may be useful in making a script more readable.
+
+cat something to stdout by removing the redirection to file (>/path/to/file).
+
+
+=========================================================
+
+###Short 'if..then..else' (almost ternary operator)
+===========================================================
+[[ condition ]] && echo "true" || echo "false" >&2
+
+
+Be sure the first command (echo "true") always exits with 0 otherwise, the second command will also be executed!
+
+$ [[ 1 -eq 1 ]] && { echo "it's true"; false; } || echo "but it's also false" >&2
+it's true
+but it's also false
+=========================================================
+
+###Read file line by line
+===========================================================
+while read -r line
+do
+  ${2:echo "\$line"}
+done < ${1:/path/to/file}
+
+=========================================================
+
+###Parsing short command line arguments/parameters
+===========================================================
+while getopts :?h arg
+do
+  case $arg in
+    )
+      : #statements
+      ;;
+    :|?|h)
+      [[ $arg == \? ]] && print_error "L'arg -$OPTARG n'est pas prise en charge !"
+      [[ $arg == : ]] && print_error "L'arg -$OPTARG requiert un argument !"
+      usage
+      exit $([[ $arg == h ]] && echo 0 || echo 2)
+      ;;
+  esac
+done
+
+
+Notes: 
+After triggering this snippet, you must enter a letter (or number) for the first argument, otherwise, script doesn't works.
+print_error is a custom function according to my needs to print message in red to stderr. You can replace it with echo "the error message" >&2.
+=========================================================
+
+###Parsing short command line options/parameters
+===========================================================
+while getopts :?a-:fqvh arg
+do
+  case $arg in
+    -)
+      if [[ ${!OPTIND} == -* ]]
+      then
+        value=
+      else
+        value="${!OPTIND}"
+        ((OPTIND++))
+      fi
+      case $OPTARG in
+        host)
+          HOST=$value
+          ;;
+        port)
+          if [[ ! $value =~ ^[0-9]+$ ]]
+          then
+            print_error "L'arg --$OPTARG a besoin d'un entier en parametre. "$value" n'est pas un entier."
+            usage
+            exit 2
+          fi
+          ;;
+        *)
+          print_error "Le parametre '--$OPTARG' n'est pas reconnu !"
+                usage
+            exit 2
+                ;;
+        esac
+      ;;
+    a)
+      [[ $OPTARG == -* ]] && print_error "L'option -$arg requiert un argument !" && usage && exit 2
+      ;;
+    )
+      : #statements
+      ;;
+    f)
+      FORCE=1
+      ;;
+    q)
+      QUIET=1
+      ;;
+    v)
+      VERBOSE=1
+      ;;
+    :|?|h)
+      [[ $arg == \? ]] && print_error "L'option -$OPTARG n'est pas prise en charge !"
+      [[ $arg == : ]] && print_error "L'option -$OPTARG requiert un argument !"
+      usage
+      exit $([[ $arg == h ]] && echo 0 || echo 2)
+      ;;
+  esac
+done
+
+=========================================================
+
+###function template
+===========================================================
+# TODO 's description
+# @param  The first parameter
+# @return
+#
+function_name() {
+  local param_name="$1"; shift
+  echo "TODO !"
+}
+
+=========================================================
+
+###usage function template
+===========================================================
+usage() {
+  cat <<-EOF
+  Usage: pgihadmin tache <CIBLE> [-f] [-q] [-h]
+  Cette tache permet de bla bla
+  PARAMETRES:
+  ===========
+      CIBLE    Serveur cible : <vide> ou all, aps, ts, lb, ord, apsN, tsN, lbN, ordN (avec N un nombre)
+  OPTIONS:
+  ========
+      -f    Mode force
+      -q    Mode silencieux
+      -h    Affiche ce message
+  EOF
+}
+
+=========================================================
+
+### List all packages with at least a class defined in a JAR file
+===========================================================
+jar tf "$1" | grep '/.*\.class$' | xargs dirname | sort -u | tr / .
+
+=========================================================
+
+### Get executed script's current working directory
+===========================================================
+CWD=$(cd "$(dirname "$0")" && pwd)
+
+#Will return excuting script's current working directory, wherever Bash executes the script containing this line.
+=========================================================
+
+### Random Git Commit
+===========================================================
+git commit -m "$(w3m whatthecommit.com | head -n 1)"
+
+=========================================================
+
+###Remove new lines from files and folders
+===========================================================
+rename 's/[\r\n]//g' *
+#This will search all files and folders in the current directory for any with a new line character in them and remove the new line out of the file/folder.
+=========================================================
+
+### Kill a process running on port 8080
+===========================================================
+lsof -i :8080 | awk 'NR > 1 {print $2}' | xargs --no-run-if-empty kill
+lsof -i :8080 | awk '{print $2}' | tail -n 1 | xargs kill
+=========================================================
+
+### Make a new folder and cd into it.
+===========================================================
+
+mkcd(){ NAME=$1; mkdir -p "$NAME"; cd "$NAME"; }
+
+Paste this function in the ~/.bashrc file.
+=========================================================
+
+### Get the HTTP status code of a URL
+===========================================================
+curl -Lw '%{http_code}' -s -o /dev/null -I SOME_URL
+
+-w '%{http_code}' is to print out the status code (the meat of this post)
+-s is to make curl silent (suppress download progress stats output)
+-o /dev/null is to redirect all output to /dev/null
+-I is to fetch the headers only, no need for the page content
+-L is to follow redirects
+
+=========================================================
+
+### Generate a sequence of numbers
+===========================================================
+perl -e 'print "$_\n" for (1..10);'
+
+#Print the number with newline character which could be replaced by any char.
+
+for ((i=1; i<=10; ++i)); do echo $i; done
+
+=========================================================
+
+### set -e   OR  set -o errexit
+===========================================================
+Every script you write should include set -e at the top. This tells bash that it should exit the script if any statement returns a non-true return value
+
+
+=========================================================
+
+###  Check network gateway traffic
+===========================================================
+#!/bin/bash
+#network
+#Mike.Xu
+while : ; do
+      time='date +%m"-"%d" "%k":"%M'
+      day='date +%m"-"%d'
+      rx_before='ifconfig eth0|sed -n "8"p|awk '{print $2}'|cut -c7-'
+      tx_before='ifconfig eth0|sed -n "8"p|awk '{print $6}'|cut -c7-'
+      sleep 2
+      rx_after='ifconfig eth0|sed -n "8"p|awk '{print $2}'|cut -c7-'
+      tx_after='ifconfig eth0|sed -n "8"p|awk '{print $6}'|cut -c7-'
+      rx_result=$[(rx_after-rx_before)/256]
+      tx_result=$[(tx_after-tx_before)/256]
+      echo "$time Now_In_Speed: "$rx_result"kbps Now_OUt_Speed: "$tx_result"kbps"
+      sleep 2
+done
+
+=========================================================
+
+###System monitoring
+===========================================================
+#!/bin/sh
+#systemstat.sh
+#Mike.Xu
+IP=192.168.1.227
+top -n 2| grep "Cpu" >>./temp/cpu.txt
+free -m | grep "Mem" >> ./temp/mem.txt
+df -k | grep "sda1" >> ./temp/drive_sda1.txt
+#df -k | grep sda2 >> ./temp/drive_sda2.txt
+df -k | grep "/mnt/storage_0" >> ./temp/mnt_storage_0.txt
+df -k | grep "/mnt/storage_pic" >> ./temp/mnt_storage_pic.txt
+time=`date +%m"."%d" "%k":"%M`
+connect=`netstat -na | grep "219.238.148.30:80" | wc -l`
+echo "$time  $connect" >> ./temp/connect_count.txt
+
+=========================================================
+
+###Monitor disk space. mail will be sent when the usage is over 90%
+===========================================================
+#!/bin/bash
+#monitor available disk space
+SPACE='df | sed -n '/ \ / $ / p' | gawk '{print $5}' | sed  's/%//'
+if [ $SPACE -ge 90 ]
+then
+fty89@163.com
+fi
+
+=========================================================
+
+###Monitor CPU and memory usage
+===========================================================
+#!/bin/bash
+#script  to capture system statistics
+OUTFILE=/home/xu/capstats.csv
+DATE='date +%m/%d/%Y'
+TIME='date +%k:%m:%s'
+TIMEOUT='uptime'
+VMOUT='vmstat 1 2'
+ USERS='echo $TIMEOUT | gawk '{print $4}' '
+LOAD='echo $TIMEOUT | gawk '{print $9}' | sed "s/,//' '
+FREE='echo $VMOUT | sed -n '/[0-9]/p' | sed -n '2p' | gawk '{print $4} ' '
+IDLE='echo  $VMOUT | sed -n '/[0-9]/p' | sed -n '2p' |gawk '{print $15}' '
+echo "$DATE,$TIME,$USERS,$LOAD,$FREE,$IDLE" >> $OUTFILE
+
+=========================================================
+
+###Full system check
+===========================================================
+#!/bin/bash
+# check_xu.sh
+# 0 * * * * /home/check_xu.sh
+  
+DAT="`date +%Y%m%d`"
+HOUR="`date +%H`"
+DIR="/home/oslog/host_${DAT}/${HOUR}"
+DELAY=60
+COUNT=60
+# whether the responsible directory exist
+if ! test -d ${DIR}
+then
+        /bin/mkdir -p ${DIR}
+fi
+# general check
+export TERM=linux
+/usr/bin/top -b -d ${DELAY} -n ${COUNT} > ${DIR}/top_${DAT}.log 2>&1 &
+# cpu check
+/usr/bin/sar -u ${DELAY} ${COUNT} > ${DIR}/cpu_${DAT}.log 2>&1 &
+#/usr/bin/mpstat -P 0 ${DELAY} ${COUNT} > ${DIR}/cpu_0_${DAT}.log 2>&1 &
+#/usr/bin/mpstat -P 1 ${DELAY} ${COUNT} > ${DIR}/cpu_1_${DAT}.log 2>&1 &
+# memory check
+/usr/bin/vmstat ${DELAY} ${COUNT} > ${DIR}/vmstat_${DAT}.log 2>&1 &
+# I/O check
+/usr/bin/iostat ${DELAY} ${COUNT} > ${DIR}/iostat_${DAT}.log 2>&1 &
+# network check
+/usr/bin/sar -n DEV ${DELAY} ${COUNT} > ${DIR}/net_${DAT}.log 2>&1 &
+#/usr/bin/sar -n EDEV ${DELAY} ${COUNT} > ${DIR}/net_edev_${DAT}.log 2>&1 &
+
+You can create a cron job to run automatically
+0 * * * * /home/check_xu.sh
+
+There will be CPU,memory,network and IO statistic data in /home/oslog/host_yyyymmdd/hh each hour. So if thee are issues on the server at some time, you can check the logs directly for that time
+=========================================================
+
+###SEEKING USER CONFIRMATION
+===========================================================
+seek_confirmation() {
+  printf "\n${bold}$@${reset}"
+  read -p " (y/n) " -n 1
+  printf "\n"
+}
+
+# Test whether the result of an 'ask' is a confirmation
+is_confirmed() {
+if [[ "$REPLY" =~ ^[Yy]$ ]]; then
+  return 0
+fi
+return 1
+}
+
+
+Sample : 
+#!/bin/bash
+
+source $HOME/.bash_profile
+source $HOME/Library/init/utils.sh
+
+e_header "I am a sample script"
+
+seek_confirmation "Do you want to print a success message?"
+if is_confirmed; then
+  e_success "Here is a success message"
+else
+  e_error "You did not ask for a success message"
+fi
+
+=========================================================
+
+### send notifications to your mobile devices using Pushover’s amazing free service
+===========================================================
+#function in utils.sh
+
+pushover () {
+  PUSHOVERURL="https://api.pushover.net/1/messages.json"
+  API_KEY="your-api-here"
+  USER_KEY="your-user-key-here"
+  DEVICE=""
+
+  TITLE="${1}"
+  MESSAGE="${2}"
+
+  curl \
+  -F "token=${API_KEY}" \
+  -F "user=${USER_KEY}" \
+  -F "device=${DEVICE}" \
+  -F "title=${TITLE}" \
+  -F "message=${MESSAGE}" \
+  "${PUSHOVERURL}" > /dev/null 2>&1
+}
+
+
+#sample script
+#!/bin/bash
+
+source utils.sh
+
+pushover "We just finished performing a lengthy task."
+
+
+
+=========================================================
+###Empty a database table
+===========================================================
+
+#!/bin/bash
+mysql -D $DATABASE -e 'TRUNCATE TABLENAME;'
+=========================================================
+
+### EC2 Script
+===========================================================
+This script is designed for AWS EC2 manager interested in installing an apache server, then copying web page files from an AWS S3 bucket to Apache's web directory.
+
+#!/bin/bash
+# Install Apache using yum package manager
+yum install httpd -y
+# Update yum
+yum update -y
+# Copy files from AWS S3 to Apache's web directory
+aws s3 cp s3://YOURBUCKETNAMEHERE/index.html /var/www/html/
+# Start Apache server
+service httpd start
+# Check the Apache server configuration
+chkconfig httpd on
+
+=========================================================
+
+### rename all files which meet pattern
+===========================================================
+#!/usr/bin/env bash
+ 
+ 
+for file in .* *; do
+# skip current/previous dirs and unresolved wildcards
+if [[ "$file"=="grimm*" ]]
+  then
+    old="grimm.3"
+    new="Grimm.S03E"
+    newname=${file/grimm.3/Grimm.S03E}
+    mv "$file" ./$newname
+    # ${string/substring/replacement}
+fi
+done
+
+=========================================================
+
+### Rename files to concesutive numbers
+===========================================================
+Renames files to 0001.jpg, 0002,jpg etc
+You can insert a prefix here: "prefix-$j.jpg"
+
+i=1
+for file in *.jpg
+do
+        j=$( printf "%04d" "$i" )
+        mv "$file" "$j.jpg"
+        (( i++ ))
+done
+=========================================================
+
+### Edit all files containing a given pattern
+===========================================================
+$EDITOR `find . -exec grep -q $PATTERN {} ';' -print`
+
+=========================================================
+
+### Find all .dot files but ignore .htaccess file
+===========================================================
+
+find . -type f \( -iname ".*" ! -iname ".htaccess" \)
+=========================================================
+
+### Remove All Files Other Than Ext
+===========================================================
+for x in *; do [-x $x -a -f $x.ext] && echo $x; done | xargs rm
+
+=========================================================
+
+### Listing all files which contains the word 'abc'
+===========================================================
+find / -type f -exec grep -H 'abc' {} \;
+
+=========================================================
+
+### Delete all files of a directory which contains a specific contents, no mather the size of the directory
+===========================================================
+
+find . -exec grep -l "From: MAILER-DAEMON" {} \; | xargs rm -rvf '{}'
+=========================================================
+
+### one liner to rename extension of all files in folder
+===========================================================
+for file in `ls *.asl`; do sudo mv $file `basename $file .asl`.asl_old; done
+
+=========================================================
+
+###Bash confirmation
+===========================================================
+read -p "do you want to continue?" -n 1 -r
+if [[ $REPLY =~ ^[Yy]$ ]]
+  then
+    #do whatever you are checking on 
+fi
+
+=========================================================
+
+###recursively call bash script from any directory
+===========================================================
+#!/usr/bin/env bash
+ 
+#this script calls for three variables to be passed to it, a directory, an indent amount, and a file for output. 
+ 
+script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+script_name=$(basename "$0")
+path_to_script=$script_dir/$script_name
+ 
+new_indent="$indent    " #this increases the indent amount for the next recursion
+new_start_dir="$start_dir/$directoryname" #this sets the next directory
+$("$path_to_script" "$new_start_dir" "$new_indent" "$outfile") #this actually calls the same 
+                                                               #script with the updated parameters
+
+=========================================================
+
+### config-bash
+===========================================================
+#!/bin/bash
+ 
+# !! Important
+# Export before sourcing this file PS_COLOR variable
+ 
+#--- Options
+# Don't wait for job termination notification
+set -o notify
+# Don't use ^D to exit
+set -o ignoreeof
+# Use case-insensitive filename globbing
+shopt -s nocaseglob
+# Make bash append rather than overwrite the history on disk
+shopt -s histappend
+# When changing directory small typos can be ignored by bash
+# for example, cd /vr/lgo/apache would find /var/log/apache
+shopt -s cdspell
+# Check the window size after each command and, if necessary,
+# update the values of LINES and COLUMNS.
+shopt -s checkwinsize
+# Append to the history file, don't overwrite it
+shopt -s histappend
+# If set, the pattern "**" used in a pathname expansion context will
+# match all files and zero or more directories and subdirectories.
+shopt -s globstar
+ 
+#--- Exports
+# Don't put duplicate lines in the history
+export HISTCONTROL="ignoredups:erasedups:ignorespace"
+# Ignore some controlling instructions
+export HISTIGNORE="[ ]*:&:bg:fg:exit"
+# Whenever displaying the prompt, write the previous line to disk
+export PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
+export HISTSIZE=100000
+export HISTFILESIZE=100000
+export PS1="\[\e]0;\w\a\]\n\[\e[34m\]\u@\h \[\e[33m\]\t \w\[\e[0m\]\n\$ "
+ 
+#--- Aliases
+alias df='df -h'
+alias du='du -h --max-depth=1'
+alias grep='grep --color'
+alias ll='ls -lh --color=auto'
+alias la='ls -lah --color=auto'
+ 
+alias m-install='mvn clean install'
+ 
+alias ga='git add'
+alias gc='git status -s -uno; git commit -a -m "Archiving"'
+
+=========================================================
+
+### Create bash alias for SSH connection
+===========================================================
+
+echo "alias sshToWork=\"ssh -i pathToKey.pem user@host\"" >> $HOME/.bash_profile
+=========================================================
+
+### CRUD shell script for Bash
+===========================================================
+Shell script written in bash which displays a menu giving the you ability to add, edit, modify, and delete users.
+
+#! /bin/bash
+ 
+GREP=/bin/grep
+ 
+createUser()
+{
+	echo "Enter Username: "
+	read name
+ 
+	$GREP -i $name /etc/passwd
+ 
+	if [ $? == 0 ]
+	then
+		echo "$name, is already a user"
+	else
+		echo "Preparing to create..."
+		sleep 1
+		clear
+		echo "Enter a comment for $name"
+		read comment
+		sudo useradd -c "$comment" -m -s /bin/bash $name
+		echo "User created!"
+		less /etc/passwd | grep $name 
+		echo "Please supply a password for $name"
+		sudo passwd $name
+	fi
+}
+ 
+modUser()
+{
+	clear
+	echo "Which user would you like to modify?"
+	read modName
+ 
+	$GREP -i $modName /etc/passwd
+ 
+	if [ $? == 0 ]
+	then
+		echo "Would you like to:"
+		echo "1) Add a comment for $modName"
+		echo "2) Modify home directory"
+		echo "3) Add an expiration date (yyyy-mm-dd)"
+		echo "4) Exit"
+ 
+		read answer
+		case "$answer" in
+			1) echo "Enter comment: ";
+			read comment
+			sudo usermod -c "$comment" $modName;
+			less /etc/passwd | grep $modName;;
+			2) echo "Enter new home directoy [path]";
+			read homeDir
+			sudo usermod -d $homeDir $modName;
+			less /etc/passwd | grep $modName;;
+			3) echo "Enter expiration date";
+			read expiration
+			sudo usermod -e $expiration $modName;
+			sudo chage -l $modName;;
+			4) exit;;
+		esac
+	else
+		echo "$modName does not exist!"
+	fi
+}
+ 
+deleteUser()
+{
+	clear
+	echo "Which user would you like to delete?"
+	read delName
+ 
+	$GREP -i $delName /etc/passwd
+ 
+	if [ $? == 0 ]
+	then
+		echo "Are you sure you want to delete $delName ? [y/n]"
+		read answer
+		if [ $answer == "y"]
+		then
+			sudo userdel -r $delName
+			echo "deleting..."
+			sleep 1
+			echo "$delName deleted!"
+			exit 0
+		fi
+	else
+		echo "$delName does not exist!"
+	fi
+ 
+}
+ 
+clear
+echo "MENU"
+echo ""
+echo "1) Create User"
+echo "2) Modify User"
+echo "3) Delete User"
+echo "4) Exit"
+ 
+read answer
+ 
+case "$answer" in
+	1) createUser;;
+	2) modUser;;
+	3) deleteUser;;
+	4) exit;;
+esac
+=========================================================
+
+### BASH inline for loop
+===========================================================
+
+for x in `cat some_list.txt`; do python some_script.py -i input_dir -o output_dir; done;
+=========================================================
+
+### exscript to replace word occurrences
+===========================================================
+#!/usr/bin/env bash
+#  Replace all instances of "Smith" with "Jones"
+#+ in files with a ".txt" filename suffix. 
+ 
+ORIGINAL=Smith
+REPLACEMENT=Jones
+ 
+for word in $(fgrep -l $ORIGINAL *.txt)
+do
+  # -------------------------------------
+  ex $word <<EOF
+  :%s/$ORIGINAL/$REPLACEMENT/g
+  :wq
+EOF
+  # :%s is the "ex" substitution command.
+  # :wq is write-and-quit.
+  # -------------------------------------
+done
+
+=========================================================
+
+### Another way to write bash menu script
+===========================================================
+
+#!/bin/sh
+ 
+f_Reg () {
+echo "Regression function"
+echo "All your logic in this function"
+}
+ 
+f_Smoke () {
+echo "Smoke function"
+echo "All your logic in this function"
+}
+ 
+while : # Loop forever
+do
+cat << !
+ 
+R U N M E N U
+ 
+1. Regression Tests
+2. Smoke Tests
+3. Quit
+ 
+!
+ 
+echo -n " Your choice? : "
+read choice
+ 
+case $choice in
+1) f_Reg ;;
+2) f_Smoke ;;
+3) exit ;;
+*) echo "\"$choice\" is not valid "; sleep 2 ;;
+esac
+done
+=========================================================
+
+### BASH one liner to rename extension of all files in folder
+===========================================================
+for file in `ls *.asl`; do sudo mv $file `basename $file .asl`.asl_old; done
+
+=========================================================
+
+### Auto Login for LinkedIn Every Hour
+===========================================================
+#This bash script uses eLinks (http://www.elinks.cz/) to automatically log into LinkedIn. A great way to keep your profile appearing among those who are active linkedin users.
+#!/bin/bash
+ 
+source /home/diggler/.bash_profile
+/usr/bin/links http://www.linkedin.com &
+sleep 8
+/usr/bin/killall links
+exit 0
+=========================================================
+
+###remove empty lines from a file
+===========================================================
+sed -i '/^$/d' file.txt
+
+=========================================================
+
+###
+===========================================================
