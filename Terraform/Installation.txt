@@ -1,0 +1,14 @@
+#Steps To Install Terraform on Windows 10 or 8 or 7
+1) Download Terraform
+https://www.terraform.io/downloads.html
+2) Unzip the terraform package
+Extract the downloaded zip file, after extracting the zip file you can see terraform.exe file.
+Extracted path can be Example "C:\Users\devops\Downloads\terraform_0.12.23_windows_amd64"
+3) Configure environment variables for terraform
+This PC(MyComputer)—>properties —>advanced system settings–>environment variables—>system variables—>path–edit–>new
+paste the path "C:\Users\devops\Downloads\terraform_0.12.23_windows_amd64"
+Click on Ok.
+4) Verify terraform version
+Open gitbash and enter
+> terraform version
+  Terraform v0.12.23
