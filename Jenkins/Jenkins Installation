@@ -7,12 +7,12 @@ Jenkins is a self-contained Java-based program, ready to run out-of-the-box, wit
 1. EC2 RHEL 7.x Instance [Get help here](https://www.youtube.com/watch?v=KDtS6BzJo3A)
    - With Internet Access
    - Security Group with Port `8080` open for internet
-1. Java v1.8.x 
+1. Java v1.11 
 
 ## Install Java
 We will be using open java for our demo, Get latest version from http://openjdk.java.net/install/
 ```sh
-yum install java-1.8*
+amazon-linux-extras install java-openjdk11
 
 ```
 
@@ -20,7 +20,7 @@ yum install java-1.8*
 Lets install java and set the java home
 ```sh
 java -version
-find /usr/lib/jvm/java-1.8* | head -n 3
+find / -name java
 #JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.191.b12-1.el7_6.x86_64
 # To set it permanently update your .bash_profile
 vi .bash_profile
