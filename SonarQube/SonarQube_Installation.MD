@@ -100,7 +100,6 @@ GRANT ALL ON sonar.* TO sonar@'%';
 
 check users and databases 
 ```sh
-use mysql
 show databases;
 SELECT User FROM mysql.user;
 FLUSH PRIVILEGES;
