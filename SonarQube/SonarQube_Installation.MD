@@ -12,55 +12,56 @@ SonarQube provides the capability to not only show health of an application but 
 
 Install java 1.8 version
 ```sh
-# yum install java-1.8*
+yum install java-1.8*
 ```
 
 Add mysql rpm Repository
 
  ```sh
-  # yum localinstall https://dev.mysql.com/get/mysql57-community-release-el7-9.noarch.rpm
+rpm --import https://repo.mysql.com/RPM-GPG-KEY-mysql-2022
+
  ```
  
  Install MySQL 5.7
  
  ```sh
-  # yum -y install mysql-community-server
+ yum -y install mysql-community-server
  ```
  
- Start MySQL and Enable Start at Boot Time
+Start MySQL and Enable Start at Boot Time
  
  ```sh
-  # systemctl start mysqld
-  # systemctl enable mysqld
+ systemctl start mysqld
+ systemctl enable mysqld
  ```
  
  Check if mysql is running or not
  
   ```sh
-  # netstat -na | grep 3306
+netstat -na | grep 3306
  ```
  
  Configure the MySQL Root Password 
  You will see default MySQL root password
  
  ```sh
- # grep 'temporary' /var/log/mysqld.log
+grep 'temporary' /var/log/mysqld.log
  ```
  Login to mysql using the default password
  ```sh
- # mysql -u root -p
+mysql -u root -p
  ```
  
  Now replace the default password with a new and strong password
  
  ```sh
- # ALTER USER 'root'@'localhost' IDENTIFIED BY 'Admin@123';
- # flush privileges;
+ALTER USER 'root'@'localhost' IDENTIFIED BY 'Admin@123';
+flush privileges;
  ```
  Test Using new password
  
  ```sh
- # mysql -u root -p
+mysql -u root -p
  ```
   
 Download stable SonarQube version from below website. 
