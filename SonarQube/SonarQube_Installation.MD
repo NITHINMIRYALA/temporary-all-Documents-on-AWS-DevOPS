@@ -20,6 +20,8 @@ Add mysql rpm Repository
  ```sh
 rpm --import https://repo.mysql.com/RPM-GPG-KEY-mysql-2022
 
+yum localinstall https://dev.mysql.com/get/mysql57-community-release-el7-9.noarch.rpm
+
  ```
  
  Install MySQL 5.7
