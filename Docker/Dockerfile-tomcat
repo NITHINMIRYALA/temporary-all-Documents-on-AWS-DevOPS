@@ -1,0 +1,20 @@
+FROM alpine:3.10
+
+MAINTAINER karthik
+
+RUN mkdir /usr/local/tomcat/
+
+WORKDIR /usr/local/tomcat
+RUN apk --no-cache add curl && \ 
+    apk add --update curl && \ 
+	curl -O https://mirrors.sonic.net/apache/tomcat/tomcat-8/v8.5.61/bin/apache-tomcat-8.5.61.tar.gz
+RUN tar xvfz apache*.tar.gz
+RUN mv apache-tomcat-8.5.61/* /usr/local/tomcat/.
+RUN rm -rf apache-*
+COPY SampleWebApp.war /usr/local/tomcat/webapps
+RUN apk update && apk add openjdk8
+WORKDIR /usr/local/tomcat
+
+EXPOSE 8080
+
+CMD ["/usr/local/tomcat/bin/catalina.sh", "run"]
