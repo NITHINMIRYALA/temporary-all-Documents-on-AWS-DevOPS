@@ -26,13 +26,7 @@ sudo systemctl start mysqld.service
 
 
  ```
- 
- Install MySQL 5.7
- 
- ```sh
- yum -y install mysql-community-server
- ```
- 
+
 Start MySQL and Enable Start at Boot Time
  
  ```sh
