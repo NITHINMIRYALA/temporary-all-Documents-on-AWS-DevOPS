@@ -18,9 +18,12 @@ yum install java-1.8*
 Add mysql rpm Repository
 
  ```sh
-rpm --import https://repo.mysql.com/RPM-GPG-KEY-mysql-2022
+yum update
+sudo wget https://dev.mysql.com/get/mysql57-community-release-el7-11.noarch.rpm
+sudo yum localinstall mysql57-community-release-el7-11.noarch.rpm 
+sudo yum install mysql-community-server
+sudo systemctl start mysqld.service
 
-yum localinstall https://dev.mysql.com/get/mysql57-community-release-el7-9.noarch.rpm
 
  ```
  
