@@ -1,0 +1,155 @@
+Terraform Notes:
+================
+
+Open visual studio code and install hashicorp extension.
+with the help of extensuon we can get lot of features like auto completion,
+syntax high lighting and auto formating.
+
+
+Terraform is written in a language called hashicorp congiguration language.
+Terraform file extensions will be .tf extension.
+
+Providers:
+Basically a plugin to talk with lot of API's.
+If we download AWS providers then means that make sure terraform downlaods all the necessary code to 
+talk to aws cloud.
+Sample terraform Script:
+========================
+a
+=====================
+# resource "<provider>_"resource_type>" "name"{
+config options ........
+}
+Terraform Init: It is used to initialized terraform and download the api based from providers.
+TerraformPlan: This command is used to do a dry run means it will show wether we are going to
+add instances/delete instances/modify instances.
+Terraform plan is kind of sanity check.
+After executing if wee see "+" in green then means adding, "-" in red then deleting
+"~" orange then measn modifying.
+
+Terraform apply : this will apply the changes ,it will ask for yes/no to cross check all
+the details again
+Terraform apply --auto-approve :- To skip manual intervention for yes/No
+
+Terraform Files:
+===============
+When we do terraform init it will create a .terraform folder which stores all the
+files related to providers.(if we delete that then we need to do terraform init again)
+
+Terraform.tfstate file gets created when we create any resource.
+This is used to keep a track of our file,and if we are modifing a file then this file is
+used to check the current status of our file.
+Terraform.tfstate file will have the complete information of our resources.
+Never make changes/delete this file as it mess with our current state.
+
+terraform Outputs:
+==================
+This can be used to print specific values from the list of resources created.
+if we have added a new output after terraform apply and want to see that then
+terraform refresh can be used to refresh the state and print the outputs.
+If want to see the outputs aafter some time then go for "terraform output"
+
+Terraform state list --> command to show list of resources created
+terraform state show <resource_id> -- Command to show the details of the resource.
+Example: Creates ec2 instance then terraform state show resource_id then
+it will show the details of the ec2 like,ami,public and private ip and etc.
+
+terraform depends_on: This can be used if we want to tell any terraform to create this service 
+only after creating the service which is in depends_on.
+But by default terraform is smart enough to understand what needs to be executed first.
+still if we want to explicitily tell terraform then go for depends_on = resource_name.
+
+terraform_target: This can be used if you want to create/destroy any one resource from template.
+terraform apply --target <resource_name>
+
+Terraform variables:
+Instead of hardcoding the values we can use variables to pass within the template as well
+as the same values can be used as references to other resources.
+Example:
+Variable "variable_name" {
+   description -- any name
+   default -- this is used to pass the value_of_variable
+   type  -- string,number,boolean
+}
+
+Description,default,value are not mandatory they are optional.
+
+How to refere the variable ?
+
+resource "aws_subnet" "subnet-1"
+   vpc_id = aws_vpc.prod-vpc.id
+   cidr_block = var.variable_name
+
+If we dont pass any value in variable and execute terraform template then
+terraform will ask the user to enter the value at runtime and store that in variable.
+we can also pass variable at command line by using the below command
+terraform apply -var "variable_name=value_of_variable"
+If we are not sure of the type of value then we can enter as type = any
+Is the type is string and user trying to enter list then terraform will throw error.
+We can also pass the variable in a file named "terraform.tfvars"
+create a file with terraform.tfvars
+variable_name = "value_of_variable"
+If we have multiple vars file then we can pass the file name at run time
+terraform apply -var-file file_name.tfvars
+
+We can also use enviromental varibles from O.S
+we can use enviromental variables for credentials.
+
+
+provider "aws" {
+  region     = "us-east-1"
+  access_key  = "AKIATSWFYQ7PJYTSOZKH"
+  secret_key  = "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"
+  }
+resource "aws_instance" "my-first-server" {
+  ami   = "ami-0b5eea76982371e91"
+  instance_type = "t2.micro"
+  key_name = "techiehorzion"
+}
+
+Set AWS_ACCESS_KEY_ID=AKIATSWFYQ7PJYTSOZKH
+set AWS_SECRET_KEY=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
+set AWS_DEFAULT_REGION=us-east-1
+
+
+terraform {
+  
+
+ backend "s3" {
+    bucket   = "terraformbucket-prod"
+    key      = "terraform.tfstate"
+    region   = "us-east-1"
+    dynamodb_table = "terraform-state-lock-dynamodb-table"
+
+    skip_region_validation      = true
+    skip_credentials_validation = true
+    skip_metadata_api_check     = true
+  }
+}
+
+
+provider "aws" {
+profile = "default"
+}
+resource "aws_instance" "my-first-server" {
+  ami   = "ami-0b5eea76982371e91"
+  instance_type = "t2.micro"
+  key_name = "techiehorzion"
+}
+
+output "instance_ip_addr" {
+  value = aws_instance.my-first-server.public_ip
+  }
+  
+
+API --> Application programming interface.  
+
+
+
+
+
+variable "access_key" {
+  description = "Myaws access key"   --> optional
+  default =AKIATSWFYQ7PJYTSOZKH   --> value what needs to be passed
+  type = any   -->
+  
