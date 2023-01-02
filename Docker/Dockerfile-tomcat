@@ -1,6 +1,6 @@
 FROM alpine:3.10
 
-MAINTAINER karthik
+MAINTAINER Techie_horizon
 
 RUN mkdir /usr/local/tomcat/
 
