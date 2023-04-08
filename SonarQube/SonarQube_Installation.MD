@@ -20,7 +20,9 @@ Add mysql rpm Repository
  ```sh
 yum update
 sudo wget https://dev.mysql.com/get/mysql57-community-release-el7-11.noarch.rpm
-sudo yum localinstall mysql57-community-release-el7-11.noarch.rpm 
+sudo yum localinstall mysql57-community-release-el7-11.noarch.rpm
+rpm --import https://repo.mysql.com/RPM-GPG-KEY-mysql-2022
+ 
 sudo yum install mysql-community-server
 sudo systemctl start mysqld.service
 
